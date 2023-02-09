@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+}
+
+android {
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.example.tutornite"
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    implementation platform('com.google.firebase:firebase-bom:31.2.0')
+    /*Realtime crash reporter that helps you track, prioritize, and fix stability issues*/
+    implementation 'com.google.firebase:firebase-crashlytics'
+    /*Analytics reports help to understand clearly how our users behave*/
+    implementation 'com.google.firebase:firebase-analytics'
+    /*To store and manage database.*/
+    implementation 'com.google.firebase:firebase-firestore'
+    /*Store and serve user-generated content, such as photos or videos.*/
+    implementation 'com.google.firebase:firebase-storage'
+    /*Firebase Authentication to authenticate users to your app.*/
+    implementation 'com.google.firebase:firebase-auth'
+
+    /*Manage font across all device sizes*/
+    implementation 'com.intuit.sdp:sdp-android:1.1.0'
+
+}

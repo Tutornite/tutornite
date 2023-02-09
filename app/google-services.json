@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1093672460478",
+    "project_id": "tutornite-2e074",
+    "storage_bucket": "tutornite-2e074.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093672460478:android:be1fc237bba7dbc9687eef",
+        "android_client_info": {
+          "package_name": "com.example.tutornite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1093672460478-gsb58dikafesu5fn4s4kg58pdtfjd56j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXlinvXn3ePL2aFdRP0wVSWOFK0Z47l3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1093672460478-gsb58dikafesu5fn4s4kg58pdtfjd56j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
