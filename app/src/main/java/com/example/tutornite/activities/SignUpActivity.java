@@ -2,7 +2,6 @@ package com.example.tutornite.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SignUpActivity extends BaseActivity {
 
     ImageView back_img;
-    EditText edt_email, edt_password, edt_name;
+    EditText edt_email, edt_password;
     Button btn_sign_up;
     TextView txt_sign_in;
 
@@ -35,7 +34,6 @@ public class SignUpActivity extends BaseActivity {
         back_img = findViewById(R.id.back_img);
         edt_email = findViewById(R.id.edt_email);
         edt_password = findViewById(R.id.edt_password);
-        edt_name = findViewById(R.id.edt_name);
         btn_sign_up = findViewById(R.id.btn_sign_up);
         txt_sign_in = findViewById(R.id.txt_sign_in);
 
@@ -44,7 +42,7 @@ public class SignUpActivity extends BaseActivity {
         });
 
         btn_sign_up.setOnClickListener(view -> {
-            validateAndProcessSignUp(edt_email.getText().toString(), edt_password.getText().toString(), edt_name.getText().toString());
+            validateAndProcessSignUp(edt_email.getText().toString(), edt_password.getText().toString());
         });
 
         txt_sign_in.setOnClickListener(view -> {
@@ -53,11 +51,7 @@ public class SignUpActivity extends BaseActivity {
         });
     }
 
-    private void validateAndProcessSignUp(String email, String password, String name) {
-        if (TextUtils.isEmpty(name)) {
-            edt_name.setError("Please enter your name");
-            return;
-        }
+    private void validateAndProcessSignUp(String email, String password) {
         if (!isValidEmail(email)) {
             edt_email.setError("Please enter a valid email address");
             return;
