@@ -15,7 +15,6 @@
 
     <string name="create_profile">Create Profile</string>
     <string name="profile_type">Select Profile Type</string>
-    <string name="date_of_birth">Select Date of Birth</string>
     <string name="select_college">Select College</string>
     <string name="rb_tutor">Tutor</string>
     <string name="rb_learner">Learner</string>
@@ -32,5 +31,13 @@
         <item>University of Waterloo</item>
         <item>Wilfrid Laurier University</item>
     </string-array>
+    
+    <string name="profile">Profile</string>
+    <string name="user_name">User Name</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="college">College</string>
+    <string name="skill_set">Skill Set</string>
+    <string name="terms_conditions">Terms and Conditions</string>
+    <string name="txt_terms_conditions">END USER LICENSE AGREEMENT \nLast updated February 15, 2023 \nTutornite is licensed to You (End-User) by Tutornite, for use only under the terms of this License Agreement. By downloading the Licensed Application from Android\'s software distribution platform (\"Play Store\"), and any update thereto (as permitted by this License Agreement), You indicate that You agree to be bound by all of the terms and conditions of this License Agreement, and that You accept this License Agreement. App Store is referred to in this License Agreement as \"Services.\" The parties of this License Agreement acknowledge that the Services are not a Party to this License Agreement and are not bound by any provisions or obligations with regard to the Licensed Application, such as warranty, liability, maintenance and support thereof. Tutornite, not the Services, is solely responsible for the Licensed Application and the content thereof. This License Agreement may not provide for usage rules for the Licensed Application that are in conflict with the latest Android Media Services Terms and Conditions (\"Usage Rules\"). Tutornite acknowledges that it had the opportunity to review the Usage Rules and this License Agreement is not conflicting with them. </string>
 
 </resources>
