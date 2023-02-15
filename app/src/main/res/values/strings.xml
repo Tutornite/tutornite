@@ -30,6 +30,7 @@
     <string name="accept_terms_conditions">I accept the terms and conditions</string>
     <string name="err_terms_conditions">Please accept terms and condtions</string>
     <string name="review_terms_conditions">Review Terms and Conditions</string>
+    <string name="select_your_skills">Select your skills</string>
 
     <string-array name="college_options">
         <item>Conestoga College</item>
