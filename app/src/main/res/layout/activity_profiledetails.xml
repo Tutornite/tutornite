@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_background"
     android:orientation="vertical"
-    tools:context=".activities.SignUpActivity">
+    tools:context=".activities.ProfileDetailsActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,18 +21,27 @@
             android:padding="@dimen/_7sdp"
             android:src="@drawable/ic_back_arrow" />
 
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:fontFamily="@font/myriad_pro_bold"
-            android:text="@string/signup"
+            android:text="@string/profile"
             android:textColor="@color/white"
             android:textSize="@dimen/_16sdp" />
 
-
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/profileimg"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/_110sdp"
+        android:padding="@dimen/_7sdp"
+        android:src="@drawable/gradient_background" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,19 +49,42 @@
         android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         android:fontFamily="@font/myriad_pro_semibold"
-        android:text="@string/email_address"
+        android:text="@string/user_name"
         android:textColor="@color/color_primary"
         android:textSize="@dimen/_15sdp" />
 
-    <EditText
-        android:id="@+id/edt_email"
+
+    <TextView
+
+        android:id="@+id/txt_username"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/_15sdp"
+    android:background="@drawable/border"
+    android:fontFamily="@font/myriad_pro_regular"
+        android:padding="@dimen/_10sdp"
+    android:textColor="@color/black"
+    android:textSize="@dimen/_16sdp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:fontFamily="@font/myriad_pro_semibold"
+        android:text="@string/date_of_birth"
+        android:textColor="@color/color_primary"
+        android:textSize="@dimen/_15sdp" />
+
+
+    <TextView
+        android:id="@+id/txt_dateofbirth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_15sdp"
         android:background="@drawable/border"
         android:fontFamily="@font/myriad_pro_regular"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
         android:padding="@dimen/_10sdp"
         android:textColor="@color/black"
         android:textSize="@dimen/_16sdp" />
@@ -64,20 +96,36 @@
         android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         android:fontFamily="@font/myriad_pro_semibold"
-        android:text="@string/password"
+        android:text="@string/college"
         android:textColor="@color/color_primary"
         android:textSize="@dimen/_15sdp" />
-
-    <EditText
-        android:id="@+id/edt_password"
+    <TextView
+        android:id="@+id/txt_college"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_15sdp"
         android:background="@drawable/border"
         android:fontFamily="@font/myriad_pro_regular"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:maxLength="8"
+        android:padding="@dimen/_10sdp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16sdp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:fontFamily="@font/myriad_pro_semibold"
+        android:text="@string/skill_set"
+        android:textColor="@color/color_primary"
+        android:textSize="@dimen/_15sdp" />
+    <TextView
+        android:id="@+id/txt_skillset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:background="@drawable/border"
+        android:fontFamily="@font/myriad_pro_regular"
         android:padding="@dimen/_10sdp"
         android:textColor="@color/black"
         android:textSize="@dimen/_16sdp" />
@@ -86,34 +134,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_7sdp"
-        android:fontFamily="@font/myriad_pro_regular"
-        android:text="@string/password_must"
-        android:textColor="@color/light_app_color"
-        android:textSize="@dimen/_14sdp" />
-
-    <Button
-        android:id="@+id/btn_sign_up"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:fontFamily="@font/myriad_pro_semibold"
+        android:text="@string/payment_link"
+        android:textColor="@color/color_primary"
+        android:textSize="@dimen/_15sdp" />
+    <TextView
+        android:id="@+id/txt_paymentlink"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_30sdp"
-        android:layout_marginBottom="@dimen/_20sdp"
-        android:fontFamily="@font/myriad_pro_bold"
-        android:text="@string/signup"
+        android:background="@drawable/border"
+        android:fontFamily="@font/myriad_pro_regular"
         android:padding="@dimen/_10sdp"
-        android:textAllCaps="false"
-        android:textSize="@dimen/_15sdp" />
-
-    <TextView
-        android:id="@+id/txt_sign_in"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_15sdp"
-        android:fontFamily="@font/myriad_pro_semibold"
-        android:padding="@dimen/_10sdp"
-        android:text="@string/already_have_an_account"
-        android:textColor="@color/color_primary"
-        android:textSize="@dimen/_15sdp" />
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16sdp" />
 
 </LinearLayout>
