@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.tutornite.R;
 import com.example.tutornite.adapters.FilterAdapter;
 import com.example.tutornite.adapters.SessionsAdapter;
@@ -39,6 +41,7 @@ import com.example.tutornite.interfaces.SessionEventsInterface;
 import com.example.tutornite.interfaces.SessionJoinInterface;
 import com.example.tutornite.models.SessionCategoryModel;
 import com.example.tutornite.models.SessionDetailsModel;
+import com.example.tutornite.models.UserModel;
 import com.example.tutornite.utils.Constants;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -86,9 +89,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
         initViews();
         setClicks();
+        fetchCurrentUser();
         fetchSessionCategories();
         fetchUpcomingSessions();
-        fetchCurrentUser();
     }
 
     private void fetchSessionCategories() {
@@ -165,8 +168,36 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     private void fetchCurrentUser() {
         currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            user_name.setText(currentUser.getUid());
-            user_email.setText(currentUser.getEmail());
+            db.collection(USERS).document(currentUser.getUid())
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                        Constants.currentUserModel = documentSnapshot.toObject(UserModel.class);
+                        setUpUserDetails();
+                    });
+        }
+    }
+
+    private void setUpUserDetails() {
+        String fullName = "";
+
+        if (!TextUtils.isEmpty(Constants.currentUserModel.getFirstName())) {
+            fullName += Constants.currentUserModel.getFirstName();
+        }
+        if (!TextUtils.isEmpty(Constants.currentUserModel.getLastName())) {
+            fullName += " " + Constants.currentUserModel.getLastName();
+        }
+
+        if (!TextUtils.isEmpty(fullName)) {
+            user_name.setText(fullName);
+        }
+
+        if (!TextUtils.isEmpty(Constants.currentUserModel.getEmail())) {
+            user_email.setText(Constants.currentUserModel.getEmail());
+        }
+
+        if (!TextUtils.isEmpty(Constants.currentUserModel.getUserImage())) {
+            Glide.with(this)
+                    .load(Base64.decode(Constants.currentUserModel.getUserImage(), Base64.DEFAULT))
+                    .into(user_image);
         }
     }
 
