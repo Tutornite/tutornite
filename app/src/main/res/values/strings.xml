@@ -12,4 +12,10 @@
     <string name="name">Name</string>
     <string name="already_have_an_account">Already have an account? Sign In</string>
     <string name="password_must">Password must:\n - 8 characters\n - At least one lowercase letter (a-z)\n - At least one uppercase letter (A-Z)\n - At least one one number (0-9)</string>
+    <string name="search_learning_sessions">Search learning sessions</string>
+    <string name="sorry_sessions_are_not_available">Sorry sessions are not available</string>
+    <string name="join">Join</string>
+    <string name="apply">Apply</string>
+    <string name="session_categories">Session Categories</string>
+    <string name="cancel">Cancel</string>
 </resources>
