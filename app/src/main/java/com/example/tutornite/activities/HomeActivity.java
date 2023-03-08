@@ -1,7 +1,7 @@
 package com.example.tutornite.activities;
 
-import static com.example.tutornite.utils.Constants.sessionsCategoryList;
-import static com.example.tutornite.utils.Constants.upcomingSessions;
+import static com.example.tutornite.utils.Constants.remoteSessionsCategoryList;
+import static com.example.tutornite.utils.Constants.remoteUpcomingSessions;
 import static com.example.tutornite.utils.FireStoreConstants.SESSIONS;
 import static com.example.tutornite.utils.FireStoreConstants.SESSIONS_CATEGORIES;
 import static com.example.tutornite.utils.FireStoreConstants.UPCOMING_SESSIONS;
@@ -41,7 +41,6 @@ import com.example.tutornite.interfaces.SessionEventsInterface;
 import com.example.tutornite.interfaces.SessionJoinInterface;
 import com.example.tutornite.models.SessionCategoryModel;
 import com.example.tutornite.models.SessionDetailsModel;
-import com.example.tutornite.models.UserModel;
 import com.example.tutornite.utils.Constants;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -86,12 +85,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        currentUser = mAuth.getCurrentUser();
 
         initViews();
         setClicks();
-        fetchCurrentUser();
         fetchSessionCategories();
         fetchUpcomingSessions();
+        setUpUserDetails();
     }
 
     private void fetchSessionCategories() {
@@ -107,8 +107,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                             recipesCategories.add(sessionCategoryModel);
                         }
 
-                        sessionsCategoryList.clear();
-                        sessionsCategoryList.addAll(recipesCategories);
+                        remoteSessionsCategoryList.clear();
+                        remoteSessionsCategoryList.addAll(recipesCategories);
                     }
                 });
     }
@@ -127,8 +127,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                             upcomingSes.add(documentSnapshot.getId());
                         }
 
-                        upcomingSessions.clear();
-                        upcomingSessions.addAll(upcomingSes);
+                        remoteUpcomingSessions.clear();
+                        remoteUpcomingSessions.addAll(upcomingSes);
                     }
                     fetchSessions();
                 });
@@ -163,17 +163,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         }
 
         recyclerSessions.setAdapter(new SessionsAdapter(this, sessionsListDetailsModel, this));
-    }
-
-    private void fetchCurrentUser() {
-        currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            db.collection(USERS).document(currentUser.getUid())
-                    .get().addOnSuccessListener(documentSnapshot -> {
-                        Constants.currentUserModel = documentSnapshot.toObject(UserModel.class);
-                        setUpUserDetails();
-                    });
-        }
     }
 
     private void setUpUserDetails() {
@@ -358,7 +347,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         txt_apply = filterDialog.findViewById(R.id.txt_apply);
         close_btn = filterDialog.findViewById(R.id.close_btn);
 
-        FilterAdapter filterAdapter = new FilterAdapter(this, sessionsCategoryList, selectedCategoriesFilter);
+        FilterAdapter filterAdapter = new FilterAdapter(this, remoteSessionsCategoryList, selectedCategoriesFilter);
 
         txt_apply.setOnClickListener(view1 -> {
             edt_search.removeTextChangedListener(textWatcher);

@@ -67,11 +67,9 @@ public class SignUpActivity extends BaseActivity {
                 .addOnCompleteListener(this, task -> {
                     hideProgressDialog();
                     if (task.isSuccessful()) {
-//                        Intent i = new Intent(this, HomeActivity.class);
-//                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                        startActivity(i);
-                        Intent intent = new Intent(this, ProfileCreateActivity.class);
-                        startActivity(intent);
+                        Intent i = new Intent(this, ProfileCreateActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
                     } else {
                         Toast.makeText(SignUpActivity.this, task.getException().getMessage(),
                                 Toast.LENGTH_SHORT).show();

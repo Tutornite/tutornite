@@ -1,6 +1,7 @@
 package com.example.tutornite.adapters;
 
-import static com.example.tutornite.utils.Constants.upcomingSessions;
+import static com.example.tutornite.utils.Constants.app_date_format;
+import static com.example.tutornite.utils.Constants.remoteUpcomingSessions;
 import static com.example.tutornite.utils.DateTimeFormatter.convertTimestampToFormat;
 
 import android.content.Context;
@@ -56,7 +57,7 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
         holder.txt_event_short_desc.setText(sessionDetailsModel.getSessionDetails());
         holder.txt_event_address.setText(sessionDetailsModel.getSessionLocation());
 
-        holder.txt_event_date.setText(convertTimestampToFormat("dd MMMM yyyy", sessionDetailsModel.getSessionDateTime()));
+        holder.txt_event_date.setText(convertTimestampToFormat(app_date_format, sessionDetailsModel.getSessionDateTime()));
         holder.txt_event_time.setText(convertTimestampToFormat("hh:mm a", sessionDetailsModel.getSessionDateTime()).toUpperCase());
 
         holder.lin_join_lay.setOnClickListener(view -> {
@@ -68,7 +69,7 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
             sessionEventsInterface.cancelSession(sessionDetailsModel.getDocumentID(), position);
         });
 
-        if (upcomingSessions.contains(sessionDetailsModel.getDocumentID())) {
+        if (remoteUpcomingSessions.contains(sessionDetailsModel.getDocumentID())) {
             holder.lin_cancel_lay.setVisibility(View.VISIBLE);
             holder.lin_join_lay.setVisibility(View.INVISIBLE);
         } else {

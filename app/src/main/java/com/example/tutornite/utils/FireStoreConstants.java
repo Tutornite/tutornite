@@ -7,8 +7,13 @@ public class FireStoreConstants {
     public static String PARTICIPANTS = "participants";
     public static String USERS = "users";
     public static String UPCOMING_SESSIONS = "upcomingSessions";
+    public static String COLLEGES = "colleges";
+    public static String SKILLS = "skills";
 
     /*Fields*/
     public static String USER_EMAIL = "useremail";
     public static String SESSION_TITLE = "sessionTitle";
+    public static String NAME = "name";
+    public static String USER_TYPE_LEARNER = "learner";
+    public static String USER_TYPE_TUTOR = "tutor";
 }

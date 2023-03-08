@@ -1,72 +1,98 @@
 package com.example.tutornite.activities;
 
+import static com.example.tutornite.utils.Constants.app_date_format;
+import static com.example.tutornite.utils.Constants.remoteColleges;
+import static com.example.tutornite.utils.Constants.remoteSkills;
+import static com.example.tutornite.utils.DateTimeFormatter.convertTimestampToFormat;
+import static com.example.tutornite.utils.FireStoreConstants.COLLEGES;
+import static com.example.tutornite.utils.FireStoreConstants.NAME;
+import static com.example.tutornite.utils.FireStoreConstants.SKILLS;
+import static com.example.tutornite.utils.FireStoreConstants.USERS;
+import static com.example.tutornite.utils.FireStoreConstants.USER_TYPE_LEARNER;
+import static com.example.tutornite.utils.FireStoreConstants.USER_TYPE_TUTOR;
+
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.InputType;
+import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.tutornite.R;
-import com.example.tutornite.models.User;
+import com.example.tutornite.models.UserModel;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileCreateActivity extends BaseActivity {
 
     ImageView back_img;
+    CircleImageView user_image;
     RadioGroup profile_radio_group;
     RadioButton rb_tutor, rb_learner;
-    Spinner college_spinner;
-    TextView txt_skills, txt_payment_link, txt_selected_skills;
-    EditText edt_payment_link, edt_date,edt_name;
+    TextView txt_payment_link, txt_selected_skills, txt_selected_college, txt_date;
+    EditText edt_payment_link, edt_first_name, edt_last_name, edt_email;
     Button btn_submit;
-    // Date picker declaration for calendar.
     DatePickerDialog datePicker;
 
-    boolean[] selectedLanguage;
-    ArrayList<Integer> langList = new ArrayList<>();
-    String[] langArray = {"Java", "C++", "Kotlin", "C", "Python", "Javascript"};
+    boolean[] selectedSkills;
+    ArrayList<Integer> skillsLst = new ArrayList<>();
+    String[] skillsArray;
 
-    private FirebaseAuth mAuth;
+    final int[] selectedCollege = {-1};
+    String[] collegesList;
 
-    User user = new User();
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+    FirebaseFirestore db;
+
+    UserModel userModel = new UserModel();
+
+    Bitmap selectedProfileImage = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_create);
+
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        currentUser = mAuth.getCurrentUser();
 
         initViews();
+        setEvents();
+        fetchColleges();
+        fetchSkills();
     }
 
-    private void initViews() {
-        back_img = findViewById(R.id.back_img);
-        profile_radio_group = findViewById(R.id.profile_radio_group);
-        rb_tutor = findViewById(R.id.rb_tutor);
-        rb_learner = findViewById(R.id.rb_learner);
-        college_spinner = findViewById(R.id.college_spinner);
-        txt_skills = findViewById(R.id.txt_skills);
-        txt_payment_link = findViewById(R.id.txt_payment_link);
-        edt_payment_link = findViewById(R.id.edt_payment_link);
-        btn_submit = findViewById(R.id.btn_submit);
-        edt_date = findViewById(R.id.edt_date);
-        txt_selected_skills = findViewById(R.id.txt_selected_skills);
-        edt_name = findViewById(R.id.edt_name);
+    private void setEvents() {
+        edt_email.setText(currentUser.getEmail());
+        userModel.setEmail(currentUser.getEmail());
 
         back_img.setOnClickListener(view -> {
             onBackPressed();
@@ -76,131 +102,317 @@ public class ProfileCreateActivity extends BaseActivity {
             validateAndProcessSubmit();
         });
 
-        ArrayAdapter<CharSequence> collegeAdapter = ArrayAdapter.createFromResource(this, R.array.college_options, android.R.layout.simple_spinner_item);
-        collegeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        college_spinner.setAdapter(collegeAdapter);
+        user_image.setOnClickListener(view -> {
+            if (checkAndRequestPermissions(this)) {
+                chooseImage(this);
+            }
+        });
+
+        edt_first_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                userModel.setFirstName(editable.toString());
+            }
+        });
+
+        edt_last_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                userModel.setLastName(editable.toString());
+            }
+        });
+
+        edt_payment_link.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                userModel.setPaymentLink(editable.toString());
+            }
+        });
 
         rb_tutor.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             if (isChecked) {
-                txt_skills.setVisibility(View.VISIBLE);
-                txt_skills.setText(R.string.select_skills_tutor);
-
                 txt_payment_link.setVisibility(View.VISIBLE);
                 edt_payment_link.setVisibility(View.VISIBLE);
-
-                user.setProfileType(1);
-
+                userModel.setType(USER_TYPE_TUTOR);
             }
         });
 
         rb_learner.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             if (isChecked) {
-                txt_skills.setVisibility(View.VISIBLE);
-                txt_selected_skills.setVisibility(View.VISIBLE);
-                txt_skills.setText(R.string.select_skills_learner);
-
                 txt_payment_link.setVisibility(View.GONE);
                 edt_payment_link.setVisibility(View.GONE);
-
-                user.setProfileType(2);
-
+                userModel.setType(USER_TYPE_LEARNER);
             }
         });
 
-        edt_date.setInputType(InputType.TYPE_NULL);
-        // Listener function invoked when date text field is clicked.
-        edt_date.setOnClickListener(v -> {
+        txt_date.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             int month = calendar.get(Calendar.MONTH);
             int year = calendar.get(Calendar.YEAR);
 
-            datePicker = new DatePickerDialog(ProfileCreateActivity.this, new DatePickerDialog.OnDateSetListener() {
-                // Listener function called when the date is selected on the calendar.
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    edt_date.setText(day + "/" + (month + 1) + "/" + year);
-                    user.setDateOfBirth(day + "/" + (month + 1) + "/" + year);
-                }
+            datePicker = new DatePickerDialog(ProfileCreateActivity.this, (datePicker, year1, month1, day1) -> {
+                calendar.set(year1, month1, day1);
+                Timestamp timestamp = new Timestamp(new Date(calendar.getTimeInMillis()));
+                userModel.setBirthOfDate(timestamp);
+                txt_date.setText(convertTimestampToFormat(app_date_format, timestamp));
             }, year, month, day);
             datePicker.show();
         });
-
-        // initialize selected language array
-        selectedLanguage = new boolean[langArray.length];
 
         txt_selected_skills.setOnClickListener(view -> {
             showSkillsDialog();
         });
 
+        txt_selected_college.setOnClickListener(view -> {
+            showCollegesDialog();
+        });
+
+        rb_tutor.setChecked(true);
+    }
+
+    private void fetchColleges() {
+        showProgressDialog();
+        db.collection(COLLEGES)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        List<String> collegesList = new ArrayList<>();
+                        for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
+                            collegesList.add(documentSnapshot.getString(NAME));
+                        }
+                        remoteColleges.clear();
+                        remoteColleges.addAll(collegesList);
+                    }
+                    hideProgressDialog();
+                });
+    }
+
+    private void fetchSkills() {
+        showProgressDialog();
+        db.collection(SKILLS)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        List<String> skillsList = new ArrayList<>();
+                        for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
+                            skillsList.add(documentSnapshot.getString(NAME));
+                        }
+                        remoteSkills.clear();
+                        remoteSkills.addAll(skillsList);
+                    }
+                    hideProgressDialog();
+                });
+    }
+
+    private void initViews() {
+        back_img = findViewById(R.id.back_img);
+        profile_radio_group = findViewById(R.id.profile_radio_group);
+        rb_tutor = findViewById(R.id.rb_tutor);
+        rb_learner = findViewById(R.id.rb_learner);
+        txt_payment_link = findViewById(R.id.txt_payment_link);
+        edt_payment_link = findViewById(R.id.edt_payment_link);
+        btn_submit = findViewById(R.id.btn_submit);
+        txt_date = findViewById(R.id.txt_date);
+        txt_selected_skills = findViewById(R.id.txt_selected_skills);
+        edt_first_name = findViewById(R.id.edt_first_name);
+        edt_last_name = findViewById(R.id.edt_last_name);
+        edt_email = findViewById(R.id.edt_email);
+        txt_selected_college = findViewById(R.id.txt_selected_college);
+        user_image = findViewById(R.id.user_image);
     }
 
     private void showSkillsDialog() {
-        // Initialize alert dialog
+        skillsArray = new String[remoteSkills.size()];
+        skillsArray = remoteSkills.toArray(skillsArray);
+        if (selectedSkills == null) {
+            selectedSkills = new boolean[skillsArray.length];
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfileCreateActivity.this);
-
-        // set title
         builder.setTitle("Select Skills");
-
-        // set dialog non cancelable
         builder.setCancelable(false);
 
-        builder.setMultiChoiceItems(langArray, selectedLanguage, (dialogInterface, i, b) -> {
-            // check condition
+        builder.setMultiChoiceItems(skillsArray, selectedSkills, (dialogInterface, i, b) -> {
             if (b) {
-                // when checkbox selected
-                // Add position  in lang list
-                langList.add(i);
-                // Sort array list
-                Collections.sort(langList);
+                skillsLst.add(i);
+                Collections.sort(skillsLst);
             } else {
-                // when checkbox unselected
-                // Remove position from langList
-                langList.remove(Integer.valueOf(i));
+                skillsLst.remove(Integer.valueOf(i));
             }
         });
 
         builder.setPositiveButton("OK", (dialogInterface, i) -> {
-            // Initialize string builder
             StringBuilder stringBuilder = new StringBuilder();
-            // use for loop
-            for (int j = 0; j < langList.size(); j++) {
-                // concat array value
-                stringBuilder.append(langArray[langList.get(j)]);
-                // check condition
-                if (j != langList.size() - 1) {
-                    // When j value  not equal
-                    // to lang list size - 1
-                    // add comma
+            for (int j = 0; j < skillsLst.size(); j++) {
+                stringBuilder.append(skillsArray[skillsLst.get(j)]);
+                if (j != skillsLst.size() - 1) {
                     stringBuilder.append(", ");
                 }
             }
-            // set text on textView
             txt_selected_skills.setText(stringBuilder.toString());
+            userModel.setSkills(txt_selected_skills.getText().toString());
         });
 
         builder.setNegativeButton("Cancel", (dialogInterface, i) -> {
-            // dismiss dialog
             dialogInterface.dismiss();
         });
 
         builder.setNeutralButton("Clear All", (dialogInterface, i) -> {
-            // use for loop
-            for (int j = 0; j < selectedLanguage.length; j++) {
-                // remove all selection
-                selectedLanguage[j] = false;
-                // clear language list
-                langList.clear();
-                // clear text view value
+            for (int j = 0; j < selectedSkills.length; j++) {
+                selectedSkills[j] = false;
+                skillsLst.clear();
                 txt_selected_skills.setText("");
+                userModel.setSkills("");
             }
         });
-        // show dialog
+        builder.show();
+    }
+
+    private void showCollegesDialog() {
+        collegesList = new String[remoteColleges.size()];
+        collegesList = remoteColleges.toArray(collegesList);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProfileCreateActivity.this);
+        builder.setTitle("Select College");
+        builder.setCancelable(false);
+
+        builder.setSingleChoiceItems(collegesList, selectedCollege[0], (dialog, which) -> {
+            selectedCollege[0] = which;
+            txt_selected_college.setText(collegesList[which]);
+            userModel.setCollege(txt_selected_college.getText().toString());
+            dialog.dismiss();
+        });
+
+        builder.setNegativeButton("Cancel", (dialogInterface, i) -> {
+            dialogInterface.dismiss();
+        });
+
         builder.show();
     }
 
     private void validateAndProcessSubmit() {
+        if (selectedProfileImage != null) {
+            String userImage = generateBitmapToBase64(selectedProfileImage);
+            userModel.setUserImage(userImage);
+        } else {
+            Toast.makeText(this, "Please select profile image", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        if (!isValidEmail(userModel.getEmail())) {
+            Toast.makeText(this, "Please enter valid email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(userModel.getFirstName())) {
+            Toast.makeText(this, "Please enter first name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(userModel.getLastName())) {
+            Toast.makeText(this, "Please enter last name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (userModel.getBirthOfDate() == null) {
+            Toast.makeText(this, "Please select birth of date", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(userModel.getCollege())) {
+            Toast.makeText(this, "Please select college", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(userModel.getSkills())) {
+            Toast.makeText(this, "Please select skills", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (userModel.getType().equalsIgnoreCase(USER_TYPE_TUTOR)) {
+            if (!isValidURL(userModel.getPaymentLink())) {
+                Toast.makeText(this, "Please enter payment link", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } else {
+            userModel.setPaymentLink("");
+        }
+
+        showProgressDialog();
+        db.collection(USERS).document(currentUser.getUid())
+                .set(userModel)
+                .addOnSuccessListener(aVoid -> {
+                    hideProgressDialog();
+                    Intent i = new Intent(this, HomeActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }).addOnFailureListener(e -> {
+                    hideProgressDialog();
+                    Toast.makeText(this, "Please try again.", Toast.LENGTH_SHORT).show();
+                });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_CANCELED) {
+            switch (requestCode) {
+                case 0:
+                    if (resultCode == RESULT_OK && data != null) {
+                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                        setImage(selectedImage);
+                    }
+                    break;
+                case 1:
+                    if (resultCode == RESULT_OK && data != null) {
+                        Uri selectedImage = data.getData();
+                        if (selectedImage != null) {
+                            Bitmap selectedImageBitmap = null;
+                            try {
+                                selectedImageBitmap
+                                        = MediaStore.Images.Media.getBitmap(
+                                        this.getContentResolver(),
+                                        selectedImage);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (selectedImageBitmap != null) {
+                                setImage(selectedImageBitmap);
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void setImage(Bitmap selectedImage) {
+        user_image.setImageBitmap(selectedImage);
+        selectedProfileImage = selectedImage;
+    }
 }

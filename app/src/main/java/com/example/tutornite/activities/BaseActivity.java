@@ -1,6 +1,6 @@
 package com.example.tutornite.activities;
 
-import static com.example.tutornite.utils.Constants.upcomingSessions;
+import static com.example.tutornite.utils.Constants.remoteUpcomingSessions;
 import static com.example.tutornite.utils.FireStoreConstants.PARTICIPANTS;
 import static com.example.tutornite.utils.FireStoreConstants.SESSIONS;
 import static com.example.tutornite.utils.FireStoreConstants.SESSION_TITLE;
@@ -8,26 +8,40 @@ import static com.example.tutornite.utils.FireStoreConstants.UPCOMING_SESSIONS;
 import static com.example.tutornite.utils.FireStoreConstants.USERS;
 import static com.example.tutornite.utils.FireStoreConstants.USER_EMAIL;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.URLUtil;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.tutornite.R;
 import com.example.tutornite.interfaces.SessionCancelInterface;
 import com.example.tutornite.interfaces.SessionJoinInterface;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -36,6 +50,7 @@ import java.util.regex.Pattern;
 public class BaseActivity extends AppCompatActivity {
 
     public Dialog progressDialog = null;
+    public final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,6 +103,10 @@ public class BaseActivity extends AppCompatActivity {
         return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    public boolean isValidURL(String url) {
+        return !TextUtils.isEmpty(url) && URLUtil.isValidUrl(url);
+    }
+
     public boolean isValidPassword(String password) {
         /*1. Upper Letter 2. Lower Letter 3. Number 4. maximum 8 digit*/
         Pattern pattern;
@@ -131,7 +150,7 @@ public class BaseActivity extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> {
                     hideProgressDialog();
                     Toast.makeText(this, "Joined successfully", Toast.LENGTH_SHORT).show();
-                    upcomingSessions.add(sessionID);
+                    remoteUpcomingSessions.add(sessionID);
                     sessionActionsInterface.joinSuccessfully();
                 }).addOnFailureListener(e -> {
                     hideProgressDialog();
@@ -163,7 +182,7 @@ public class BaseActivity extends AppCompatActivity {
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     hideProgressDialog();
-                    upcomingSessions.remove(sessionID);
+                    remoteUpcomingSessions.remove(sessionID);
                     Toast.makeText(this, "Cancelled successfully", Toast.LENGTH_SHORT).show();
                     sessionCancelInterface.cancelledSuccessfully();
                 }).addOnFailureListener(e -> {
@@ -171,4 +190,77 @@ public class BaseActivity extends AppCompatActivity {
                     Toast.makeText(this, "Please try again.", Toast.LENGTH_SHORT).show();
                 });
     }
+
+    public static String generateBitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
+        byte[] imageBytes = baos.toByteArray();
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
+    public boolean checkAndRequestPermissions(final Activity context) {
+        int W_Ext_storagePermission = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int cameraPermission = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.CAMERA);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.CAMERA);
+        }
+        if (W_Ext_storagePermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded
+                    .add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(context, listPermissionsNeeded
+                            .toArray(new String[listPermissionsNeeded.size()]),
+                    REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+
+    public void chooseImage(Context context) {
+        final CharSequence[] optionsMenu = {"Take Photo", "Choose from Gallery", "Exit"}; // create a menuOption Array
+        // create a dialog for showing the optionsMenu
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        // set the items in builder
+        builder.setItems(optionsMenu, (dialogInterface, i) -> {
+            if (optionsMenu[i].equals("Take Photo")) {
+                // Open the camera and get the photo
+                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePicture, 0);
+            } else if (optionsMenu[i].equals("Choose from Gallery")) {
+                // choose from  external storage
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto, 1);
+            } else if (optionsMenu[i].equals("Exit")) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_ID_MULTIPLE_PERMISSIONS:
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(),
+                                    "Tutornite Requires Access to Camara.", Toast.LENGTH_SHORT)
+                            .show();
+                } else if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(),
+                            "Tutornite Requires Access to Your Storage.",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    chooseImage(this);
+                }
+                break;
+        }
+    }
+
 }
