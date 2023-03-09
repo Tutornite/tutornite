@@ -38,6 +38,6 @@
         android:layout_marginHorizontal="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_15sdp"
         android:fontFamily="@font/myriad_pro_bold"
-        android:textColor="@color/black"
-        android:text="@string/txt_terms_conditions"/>
+        android:text="@string/txt_terms_conditions"
+        android:textColor="@color/black" />
 </LinearLayout>
