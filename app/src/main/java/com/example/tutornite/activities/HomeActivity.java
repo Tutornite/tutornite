@@ -320,6 +320,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.profile_nav:
                 drawer_layout.closeDrawer(Gravity.LEFT);
+                startActivity(new Intent(this, ProfileDetailsActivity.class));
                 break;
             case R.id.rel_filter:
                 selectFilterDialog();

@@ -356,7 +356,7 @@ public class ProfileCreateActivity extends BaseActivity {
         }
         if (userModel.getType().equalsIgnoreCase(USER_TYPE_TUTOR)) {
             if (!isValidURL(userModel.getPaymentLink())) {
-                Toast.makeText(this, "Please enter payment link", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enter valid payment link", Toast.LENGTH_SHORT).show();
                 return;
             }
         } else {

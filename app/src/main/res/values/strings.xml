@@ -41,4 +41,5 @@
     <string name="who_are_you">Who are you?</string>
     <string name="select_college">Select the college where you studied or currently studying</string>
     <string name="select_the_college">Select the college</string>
+    <string name="update_profile">Update Profile</string>
 </resources>
