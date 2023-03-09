@@ -53,4 +53,9 @@ dependencies {
     /*Manage font across all device sizes*/
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
 
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+
 }
