@@ -92,6 +92,17 @@
         android:textColor="@color/light_app_color"
         android:textSize="@dimen/_14sdp" />
 
+    <TextView
+        android:id="@+id/terms_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:fontFamily="@font/myriad_pro_regular"
+        android:text="@string/by_signing_up_you_re_agree_to_our_terms_amp_conditions"
+        android:textColor="@color/color_primary"
+        android:textSize="@dimen/_14sdp" />
+
     <Button
         android:id="@+id/btn_sign_up"
         android:layout_width="match_parent"
@@ -100,8 +111,8 @@
         android:layout_marginTop="@dimen/_30sdp"
         android:layout_marginBottom="@dimen/_20sdp"
         android:fontFamily="@font/myriad_pro_bold"
-        android:text="@string/signup"
         android:padding="@dimen/_10sdp"
+        android:text="@string/signup"
         android:textAllCaps="false"
         android:textSize="@dimen/_15sdp" />
 

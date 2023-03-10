@@ -34,10 +34,10 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:fontFamily="@font/myriad_pro_bold"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_15sdp"
+        android:fontFamily="@font/myriad_pro_regular"
         android:text="@string/txt_terms_conditions"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14sdp" />
 </LinearLayout>
