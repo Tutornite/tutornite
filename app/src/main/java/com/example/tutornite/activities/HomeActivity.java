@@ -36,9 +36,7 @@ import com.bumptech.glide.Glide;
 import com.example.tutornite.R;
 import com.example.tutornite.adapters.FilterAdapter;
 import com.example.tutornite.adapters.SessionsAdapter;
-import com.example.tutornite.interfaces.SessionCancelInterface;
 import com.example.tutornite.interfaces.SessionEventsInterface;
-import com.example.tutornite.interfaces.SessionJoinInterface;
 import com.example.tutornite.models.SessionCategoryModel;
 import com.example.tutornite.models.SessionDetailsModel;
 import com.example.tutornite.utils.Constants;
@@ -409,21 +407,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void joinSession(String sessionID, String sessionTitle, int position) {
         joinSessionBase(db, sessionID, currentUser.getUid(),
-                currentUser.getEmail(), sessionTitle, new SessionJoinInterface() {
-                    @Override
-                    public void joinSuccessfully() {
-                        recyclerSessions.getAdapter().notifyItemChanged(position);
-                    }
-                });
+                currentUser.getEmail(), sessionTitle, () ->
+                        recyclerSessions.getAdapter().notifyItemChanged(position));
     }
 
     @Override
     public void cancelSession(String sessionID, int position) {
-        cancelJoinSessionBase(db, sessionID, currentUser.getUid(), new SessionCancelInterface() {
-            @Override
-            public void cancelledSuccessfully() {
-                recyclerSessions.getAdapter().notifyItemChanged(position);
-            }
-        });
+        cancelJoinSessionBase(db, sessionID, currentUser.getUid(), () ->
+                recyclerSessions.getAdapter().notifyItemChanged(position));
     }
 }

@@ -1,21 +1,24 @@
 package com.example.tutornite.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
+import static com.example.tutornite.utils.Constants.app_date_format;
+import static com.example.tutornite.utils.Constants.sessionDetails;
+import static com.example.tutornite.utils.DateTimeFormatter.convertTimestampToFormat;
+
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Base64;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.example.tutornite.R;
 import com.example.tutornite.models.SessionDetailsModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-public class SessionDetailsActivity extends AppCompatActivity {
-
-    SessionDetailsModel sessionDetailsModel = new SessionDetailsModel();
+public class SessionDetailsActivity extends BaseActivity {
 
     ImageView back_img, user_img;
     Button btn_session_join;
@@ -55,15 +58,30 @@ public class SessionDetailsActivity extends AppCompatActivity {
         back_img.setOnClickListener(view -> {
             onBackPressed();
         });
+
+        btn_session_join.setOnClickListener(view -> {
+
+        });
+
+
     }
 
     private void populateSessionDetails() {
-        txt_session_title.setText(sessionDetailsModel.getSessionTitle());
-        txt_tutor_name.setText(sessionDetailsModel.getPostedByUID());
-        //user_img.setImageBitmap(sessionDetailsModel.getUserThumb());
-        //txt_event_time.setText(sessionDetailsModel.getSessionDateTime());
-        txt_event_short_desc.setText(sessionDetailsModel.getSessionDetails());
-        txt_event_address.setText(sessionDetailsModel.getSessionLocation());
+        if (sessionDetails != null) {
+            SessionDetailsModel sessionDetailsModel = sessionDetails;
 
+            txt_session_title.setText(sessionDetailsModel.getSessionTitle());
+            txt_tutor_name.setText(sessionDetailsModel.getPostedByUID());
+            if (!TextUtils.isEmpty(sessionDetailsModel.getUserThumb())) {
+                Glide.with(this)
+                        .load(Base64.decode(sessionDetailsModel.getUserThumb(), Base64.DEFAULT))
+                        .into(user_img);
+            }
+
+            txt_event_date.setText(convertTimestampToFormat(app_date_format, sessionDetailsModel.getSessionDateTime()));
+            txt_event_time.setText(convertTimestampToFormat("hh:mm a", sessionDetailsModel.getSessionDateTime()).toUpperCase());
+            txt_event_short_desc.setText(sessionDetailsModel.getSessionDetails());
+            txt_event_address.setText(sessionDetailsModel.getSessionLocation());
+        }
     }
 }

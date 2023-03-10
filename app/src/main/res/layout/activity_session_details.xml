@@ -40,57 +40,59 @@
             android:id="@+id/txt_session_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_5sdp"
             android:fontFamily="@font/myriad_pro_semibold"
-            android:layout_gravity="center"
-            android:text="Android Development"
             android:textColor="@color/color_primary"
-            android:textSize="@dimen/_15sdp" />
+            android:textSize="@dimen/_18sdp"
+            tools:text="Android Development" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_user_image"
-            android:layout_width="@dimen/_27sdp"
-            android:layout_height="@dimen/_27sdp"
-            android:scaleType="centerCrop"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_user"
             android:layout_marginTop="@dimen/_15sdp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_user"
             app:civ_border_color="@color/color_accent"
             app:civ_border_width="@dimen/_1sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/txt_tutor_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_marginBottom="@dimen/_5sdp"
             android:fontFamily="@font/myriad_pro_semibold"
-            android:layout_gravity="center"
-            android:text="Tutor Name"
             android:textColor="@color/color_primary"
-            android:textSize="@dimen/_10sdp" />
+            android:textSize="@dimen/_15sdp"
+            tools:text="Tutor Name" />
 
         <TextView
             android:id="@+id/txt_event_short_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_2sdp"
-            android:layout_marginLeft="@dimen/_2sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
             android:ellipsize="end"
             android:fontFamily="@font/myriad_pro_semibold"
             android:maxLines="10"
             android:textColor="@color/font_gray"
-            android:textSize="@dimen/_13sdp"
+            android:textSize="@dimen/_15sdp"
             tools:text="Hello everyone, I am going to teach a android application development. Every platforms are having their own apps." />
 
         <LinearLayout
             android:id="@+id/lin_location_lay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_2sdp"
             android:gravity="center"
             android:orientation="horizontal"
@@ -99,8 +101,8 @@
             app:layout_constraintTop_toBottomOf="@id/txt_event_short_desc">
 
             <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:padding="@dimen/_3sdp"
                 android:src="@drawable/ic_location_pin" />
 
@@ -110,9 +112,8 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:fontFamily="@font/myriad_pro_semibold"
-                android:maxLines="1"
                 android:textColor="@color/font_gray"
-                android:textSize="@dimen/_13sdp"
+                android:textSize="@dimen/_15sdp"
                 tools:text="Conestoga College Waterloo Campus 365 LLO" />
 
         </LinearLayout>
@@ -121,6 +122,7 @@
             android:id="@+id/lay_date_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_2sdp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -129,8 +131,8 @@
             app:layout_constraintTop_toBottomOf="@id/lin_location_lay">
 
             <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_calender" />
 
@@ -140,12 +142,12 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/myriad_pro_semibold"
                 android:textColor="@color/font_gray"
-                android:textSize="@dimen/_13sdp"
+                android:textSize="@dimen/_15sdp"
                 tools:text="12 May 2017" />
 
             <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_marginStart="@dimen/_30sdp"
                 android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_clock" />
@@ -156,10 +158,11 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/myriad_pro_semibold"
                 android:textColor="@color/font_gray"
-                android:textSize="@dimen/_13sdp"
+                android:textSize="@dimen/_15sdp"
                 tools:text="12:30 PM" />
 
         </LinearLayout>
+
         <Button
             android:id="@+id/btn_session_join"
             android:layout_width="match_parent"
@@ -171,7 +174,8 @@
             android:padding="@dimen/_10sdp"
             android:text="@string/btn_session_join"
             android:textAllCaps="false"
-            android:textSize="@dimen/_15sdp" />
+            android:textSize="@dimen/_15sdp"
+            android:visibility="gone" />
 
 
     </LinearLayout>
