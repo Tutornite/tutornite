@@ -16,7 +16,7 @@ public class SignUpActivity extends BaseActivity {
     ImageView back_img;
     EditText edt_email, edt_password;
     Button btn_sign_up;
-    TextView txt_sign_in;
+    TextView txt_sign_in, terms_txt;
 
     private FirebaseAuth mAuth;
 
@@ -36,9 +36,14 @@ public class SignUpActivity extends BaseActivity {
         edt_password = findViewById(R.id.edt_password);
         btn_sign_up = findViewById(R.id.btn_sign_up);
         txt_sign_in = findViewById(R.id.txt_sign_in);
+        terms_txt = findViewById(R.id.terms_txt);
 
         back_img.setOnClickListener(view -> {
             onBackPressed();
+        });
+
+        terms_txt.setOnClickListener(view -> {
+            startActivity(new Intent(this, TermsConditionsActivity.class));
         });
 
         btn_sign_up.setOnClickListener(view -> {

@@ -1,6 +1,7 @@
 package com.example.tutornite.utils;
 
 import com.example.tutornite.models.SessionCategoryModel;
+import com.example.tutornite.models.SessionDetailsModel;
 import com.example.tutornite.models.UserModel;
 
 import java.util.ArrayList;
@@ -15,4 +16,7 @@ public class Constants {
     public static ArrayList<String> remoteColleges = new ArrayList<>();
     public static UserModel currentUserModel = new UserModel();
     public static String app_date_format = "dd MMMM yyyy";
+
+    /*Session*/
+    public static SessionDetailsModel sessionDetails;
 }

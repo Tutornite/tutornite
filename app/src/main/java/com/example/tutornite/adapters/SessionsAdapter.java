@@ -5,6 +5,7 @@ import static com.example.tutornite.utils.Constants.remoteUpcomingSessions;
 import static com.example.tutornite.utils.DateTimeFormatter.convertTimestampToFormat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -18,8 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tutornite.R;
+import com.example.tutornite.activities.SessionDetailsActivity;
 import com.example.tutornite.interfaces.SessionEventsInterface;
 import com.example.tutornite.models.SessionDetailsModel;
+import com.example.tutornite.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -76,6 +79,12 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
             holder.lin_cancel_lay.setVisibility(View.INVISIBLE);
             holder.lin_join_lay.setVisibility(View.VISIBLE);
         }
+
+        holder.itemView.setOnClickListener(view -> {
+            Constants.sessionDetails = sessionDetailsModel;
+            Intent intent = new Intent(context, SessionDetailsActivity.class);
+            context.startActivity(intent);
+        });
     }
 
     @Override

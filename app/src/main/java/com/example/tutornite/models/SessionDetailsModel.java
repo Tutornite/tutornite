@@ -6,7 +6,7 @@ import com.google.firebase.firestore.Exclude;
 public class SessionDetailsModel {
 
     String documentID, postedByUID, sessionLocation, sessionDetails,
-            sessionTitle, userThumb, categoryID;
+            sessionTitle, userThumb, categoryID, postedBy;
     Timestamp sessionDateTime;
 
     public SessionDetailsModel() {
@@ -75,5 +75,13 @@ public class SessionDetailsModel {
 
     public void setCategoryID(String categoryID) {
         this.categoryID = categoryID;
+    }
+
+    public String getPostedBy() {
+        return postedBy;
+    }
+
+    public void setPostedBy(String postedBy) {
+        this.postedBy = postedBy;
     }
 }

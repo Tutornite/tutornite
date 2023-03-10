@@ -1,14 +1,16 @@
 package com.example.tutornite.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.tutornite.R;
 
 public class TermsConditionsActivity extends AppCompatActivity {
 
     ImageView back_img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
