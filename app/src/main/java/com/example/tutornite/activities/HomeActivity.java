@@ -63,7 +63,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     LinearLayout share_nav, rating_nav, logout_nav, profile_nav;
     RelativeLayout rel_filter;
     CircleImageView user_image;
-    FloatingActionButton add_recipe_fab;
+    FloatingActionButton create_session_fab;
     EditText edt_search;
     TextView no_recipes_txt, user_name, user_email;
     TextWatcher textWatcher;
@@ -197,7 +197,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         logout_nav.setOnClickListener(this);
         profile_nav.setOnClickListener(this);
         rel_filter.setOnClickListener(this);
-        add_recipe_fab.setOnClickListener(this);
+        create_session_fab.setOnClickListener(this);
 
         drawer_layout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -269,7 +269,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         profile_nav = findViewById(R.id.profile_nav);
         rel_filter = findViewById(R.id.rel_filter);
         no_recipes_txt = findViewById(R.id.no_recipes_txt);
-        add_recipe_fab = findViewById(R.id.add_recipe_fab);
+        create_session_fab = findViewById(R.id.create_session_fab);
         edt_search = findViewById(R.id.edt_search);
         user_image = findViewById(R.id.user_image);
         user_name = findViewById(R.id.user_name);
@@ -325,8 +325,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.rel_filter:
                 selectFilterDialog();
                 break;
-            case R.id.add_recipe_fab:
-
+            case R.id.create_session_fab:
+                drawer_layout.closeDrawer(Gravity.LEFT);
+                startActivity(new Intent(this, SessionCreateActivity.class));
                 break;
         }
     }
