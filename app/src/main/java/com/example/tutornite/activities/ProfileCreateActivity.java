@@ -1,6 +1,7 @@
 package com.example.tutornite.activities;
 
 import static com.example.tutornite.utils.Constants.app_date_format;
+import static com.example.tutornite.utils.Constants.currentUserModel;
 import static com.example.tutornite.utils.Constants.remoteColleges;
 import static com.example.tutornite.utils.Constants.remoteSkills;
 import static com.example.tutornite.utils.DateTimeFormatter.convertTimestampToFormat;
@@ -187,6 +188,7 @@ public class ProfileCreateActivity extends BaseActivity {
                 userModel.setBirthOfDate(timestamp);
                 txt_date.setText(convertTimestampToFormat(app_date_format, timestamp));
             }, year, month, day);
+            datePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
             datePicker.show();
         });
 
@@ -367,6 +369,7 @@ public class ProfileCreateActivity extends BaseActivity {
         db.collection(USERS).document(currentUser.getUid())
                 .set(userModel)
                 .addOnSuccessListener(aVoid -> {
+                    currentUserModel = userModel;
                     hideProgressDialog();
                     Intent i = new Intent(this, HomeActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

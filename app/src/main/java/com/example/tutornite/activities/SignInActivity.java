@@ -1,5 +1,7 @@
 package com.example.tutornite.activities;
 
+import static com.example.tutornite.utils.FireStoreConstants.USERS;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,7 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tutornite.R;
+import com.example.tutornite.models.UserModel;
+import com.example.tutornite.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignInActivity extends BaseActivity {
 
@@ -20,7 +26,8 @@ public class SignInActivity extends BaseActivity {
     Button btn_sign_in;
     TextView txt_forgot_password, txt_signup;
 
-    private FirebaseAuth mAuth;
+    FirebaseAuth mAuth;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,7 @@ public class SignInActivity extends BaseActivity {
         setContentView(R.layout.activity_sign_in);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         initViews();
     }
@@ -107,9 +115,19 @@ public class SignInActivity extends BaseActivity {
                 .addOnCompleteListener(this, task -> {
                     hideProgressDialog();
                     if (task.isSuccessful()) {
-                        Intent i = new Intent(this, HomeActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
+                        db.collection(USERS).document(mAuth.getUid())
+                                .get().addOnCompleteListener(taskUser -> {
+                                    Intent i = new Intent(this, HomeActivity.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                                    if (taskUser.isSuccessful()) {
+                                        DocumentSnapshot document = taskUser.getResult();
+                                        if (document.exists()) {
+                                            Constants.currentUserModel = document.toObject(UserModel.class);
+                                        }
+                                    }
+                                    startActivity(i);
+                                });
                     } else {
                         Toast.makeText(SignInActivity.this, task.getException().getMessage(),
                                 Toast.LENGTH_SHORT).show();

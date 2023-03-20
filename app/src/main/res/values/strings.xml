@@ -57,4 +57,16 @@
     <string name="btn_session_join">Join</string>
     <string name="session_time">Session Time</string>
     <string name="by_signing_up_you_re_agree_to_our_terms_amp_conditions"><![CDATA[By signing up, you\'re agree to our Terms & Conditions]]></string>
+    <string name="posted_by_you">Posted By You</string>
+    <string name="my_sessions">My Sessions</string>
+    <string name="organised_sessions">Organised Sessions</string>
+    <string name="delete_session">Delete Session</string>
+    <string name="tutor_name">Tutor Name</string>
+    <string name="totur_study">College where Tutor studied or currently studying</string>
+    <string name="tutor_skills">Tutor Skills</string>
+    <string name="donate_to_support">Donate to Support</string>
+    <string name="tutor_details">Tutor Details</string>
+    <string name="session_topic">Session Topic</string>
+    <string name="session_organised_by">Session Organised By</string>
+    <string name="session_date_amp_time"><![CDATA[Session Date & Time]]></string>
 </resources>

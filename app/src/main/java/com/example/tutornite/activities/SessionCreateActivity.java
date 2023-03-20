@@ -154,6 +154,7 @@ public class SessionCreateActivity extends BaseActivity {
                     sessionModel.setSessionDateTime(timestampn);
                 }
             }, year, month, day);
+            datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
             datePicker.show();
         });
 

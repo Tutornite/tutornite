@@ -190,6 +190,7 @@ public class ProfileDetailsActivity extends BaseActivity {
                 userModel.setBirthOfDate(timestamp);
                 txt_date.setText(convertTimestampToFormat(app_date_format, timestamp));
             }, year, month, day);
+            datePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
             datePicker.show();
         });
 
