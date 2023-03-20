@@ -1,11 +1,14 @@
 package com.example.tutornite.activities;
 
+import static com.example.tutornite.utils.Constants.FROM_HOME_SCREEN;
+import static com.example.tutornite.utils.Constants.HOME_SCREEN;
 import static com.example.tutornite.utils.Constants.remoteSessionsCategoryList;
 import static com.example.tutornite.utils.Constants.remoteUpcomingSessions;
 import static com.example.tutornite.utils.FireStoreConstants.SESSIONS;
 import static com.example.tutornite.utils.FireStoreConstants.SESSIONS_CATEGORIES;
 import static com.example.tutornite.utils.FireStoreConstants.UPCOMING_SESSIONS;
 import static com.example.tutornite.utils.FireStoreConstants.USERS;
+import static com.example.tutornite.utils.FireStoreConstants.USER_TYPE_LEARNER;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -47,6 +50,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +62,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     ImageView drawer_btn;
     DrawerLayout drawer_layout;
-    LinearLayout share_nav, rating_nav, logout_nav, profile_nav;
+    LinearLayout share_nav, rating_nav, logout_nav, profile_nav, my_sessions_nav, organised_sessions_nav;
     RelativeLayout rel_filter;
     CircleImageView user_image;
     FloatingActionButton create_session_fab;
@@ -88,7 +92,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         initViews();
         setClicks();
         fetchSessionCategories();
-        fetchUpcomingSessions();
         setUpUserDetails();
     }
 
@@ -160,7 +163,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             recyclerSessions.setVisibility(View.VISIBLE);
         }
 
-        recyclerSessions.setAdapter(new SessionsAdapter(this, sessionsListDetailsModel, this));
+        recyclerSessions.setAdapter(new SessionsAdapter(this, sessionsListDetailsModel, this, currentUser.getUid(), FROM_HOME_SCREEN));
     }
 
     private void setUpUserDetails() {
@@ -186,6 +189,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                     .load(Base64.decode(Constants.currentUserModel.getUserImage(), Base64.DEFAULT))
                     .into(user_image);
         }
+
+        if (Constants.currentUserModel.getType().equalsIgnoreCase(USER_TYPE_LEARNER)) {
+            create_session_fab.setVisibility(View.GONE);
+            organised_sessions_nav.setVisibility(View.GONE);
+        }
     }
 
     private void setClicks() {
@@ -194,6 +202,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         rating_nav.setOnClickListener(this);
         logout_nav.setOnClickListener(this);
         profile_nav.setOnClickListener(this);
+        my_sessions_nav.setOnClickListener(this);
+        organised_sessions_nav.setOnClickListener(this);
         rel_filter.setOnClickListener(this);
         create_session_fab.setOnClickListener(this);
 
@@ -265,6 +275,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         rating_nav = findViewById(R.id.rating_nav);
         logout_nav = findViewById(R.id.logout_nav);
         profile_nav = findViewById(R.id.profile_nav);
+        my_sessions_nav = findViewById(R.id.my_sessions_nav);
+        organised_sessions_nav = findViewById(R.id.organised_sessions_nav);
         rel_filter = findViewById(R.id.rel_filter);
         no_recipes_txt = findViewById(R.id.no_recipes_txt);
         create_session_fab = findViewById(R.id.create_session_fab);
@@ -319,6 +331,17 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.profile_nav:
                 drawer_layout.closeDrawer(Gravity.LEFT);
                 startActivity(new Intent(this, ProfileDetailsActivity.class));
+                break;
+            case R.id.my_sessions_nav:
+                drawer_layout.closeDrawer(Gravity.LEFT);
+                Intent intent = new Intent(this, MySessionActivity.class);
+                Gson gson = new Gson();
+                intent.putExtra(HOME_SCREEN, gson.toJson(sessionsListDetailsModel));
+                startActivity(intent);
+                break;
+            case R.id.organised_sessions_nav:
+                drawer_layout.closeDrawer(Gravity.LEFT);
+                startActivity(new Intent(this, OrganisedSessionActivity.class));
                 break;
             case R.id.rel_filter:
                 selectFilterDialog();
@@ -385,17 +408,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         setUpSessionsList(searchList);
     }
 
-    public void openWebPage(String url) {
-        try {
-            Uri webpage = Uri.parse(url);
-            Intent myIntent = new Intent(Intent.ACTION_VIEW, webpage);
-            startActivity(myIntent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "No application can handle this request. Please install a web browser or check your URL.", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
-    }
-
     public void shareApp() {
         String shareBody = "Download our app using this link " + Constants.share_app_url;
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
@@ -415,5 +427,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     public void cancelSession(String sessionID, int position) {
         cancelJoinSessionBase(db, sessionID, currentUser.getUid(), () ->
                 recyclerSessions.getAdapter().notifyItemChanged(position));
+    }
+
+    @Override
+    public void deleteSession(String documentID, int position) {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchUpcomingSessions();
     }
 }

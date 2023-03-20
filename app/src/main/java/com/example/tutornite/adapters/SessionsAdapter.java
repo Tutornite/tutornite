@@ -1,5 +1,7 @@
 package com.example.tutornite.adapters;
 
+import static com.example.tutornite.utils.Constants.FROM_HOME_SCREEN;
+import static com.example.tutornite.utils.Constants.FROM_ORGANISED_SESSION;
 import static com.example.tutornite.utils.Constants.app_date_format;
 import static com.example.tutornite.utils.Constants.remoteUpcomingSessions;
 import static com.example.tutornite.utils.DateTimeFormatter.convertTimestampToFormat;
@@ -33,11 +35,18 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
     Context context;
     ArrayList<SessionDetailsModel> sessionsListDetailsModel;
     SessionEventsInterface sessionEventsInterface;
+    String currentUserID;
+    String fromWhichScreen;
 
-    public SessionsAdapter(Context context, ArrayList<SessionDetailsModel> sessionsListDetailsModel, SessionEventsInterface sessionEventsInterface) {
+    public SessionsAdapter(Context context,
+                           ArrayList<SessionDetailsModel> sessionsListDetailsModel,
+                           SessionEventsInterface sessionEventsInterface,
+                           String uid, String fromWhichScreen) {
         this.context = context;
         this.sessionsListDetailsModel = sessionsListDetailsModel;
         this.sessionEventsInterface = sessionEventsInterface;
+        this.currentUserID = uid;
+        this.fromWhichScreen = fromWhichScreen;
     }
 
     @NonNull
@@ -72,12 +81,25 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
             sessionEventsInterface.cancelSession(sessionDetailsModel.getDocumentID(), position);
         });
 
-        if (remoteUpcomingSessions.contains(sessionDetailsModel.getDocumentID())) {
-            holder.lin_cancel_lay.setVisibility(View.VISIBLE);
-            holder.lin_join_lay.setVisibility(View.INVISIBLE);
-        } else {
-            holder.lin_cancel_lay.setVisibility(View.INVISIBLE);
-            holder.lin_join_lay.setVisibility(View.VISIBLE);
+        holder.lin_delete_lay.setOnClickListener(view -> {
+            sessionEventsInterface.deleteSession(sessionDetailsModel.getDocumentID(), position);
+        });
+
+        holder.lin_author_lay.setVisibility(View.INVISIBLE);
+        holder.lin_cancel_lay.setVisibility(View.INVISIBLE);
+        holder.lin_delete_lay.setVisibility(View.INVISIBLE);
+        holder.lin_join_lay.setVisibility(View.INVISIBLE);
+
+        if (fromWhichScreen.equalsIgnoreCase(FROM_ORGANISED_SESSION)) {
+            holder.lin_delete_lay.setVisibility(View.VISIBLE);
+        } else if (fromWhichScreen.equalsIgnoreCase(FROM_HOME_SCREEN)) {
+            if (remoteUpcomingSessions.contains(sessionDetailsModel.getDocumentID())) {
+                holder.lin_cancel_lay.setVisibility(View.VISIBLE);
+            } else if (sessionDetailsModel.getPostedByUID().equals(currentUserID)) {
+                holder.lin_author_lay.setVisibility(View.VISIBLE);
+            } else {
+                holder.lin_join_lay.setVisibility(View.VISIBLE);
+            }
         }
 
         holder.itemView.setOnClickListener(view -> {
@@ -97,11 +119,16 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
         return sessionsListDetailsModel.size();
     }
 
+    public void removeItem(int position) {
+        sessionsListDetailsModel.remove(position);
+        notifyItemRemoved(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView img_user_image;
         TextView txt_event_title, txt_event_short_desc, txt_event_address, txt_event_date, txt_event_time;
-        LinearLayout lin_join_lay, lin_cancel_lay;
+        LinearLayout lin_join_lay, lin_cancel_lay, lin_author_lay, lin_delete_lay;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -114,6 +141,8 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
             txt_event_time = itemView.findViewById(R.id.txt_event_time);
             lin_join_lay = itemView.findViewById(R.id.lin_join_lay);
             lin_cancel_lay = itemView.findViewById(R.id.lin_cancel_lay);
+            lin_author_lay = itemView.findViewById(R.id.lin_author_lay);
+            lin_delete_lay = itemView.findViewById(R.id.lin_delete_lay);
         }
     }
 }

@@ -19,4 +19,9 @@ public class Constants {
 
     /*Session*/
     public static SessionDetailsModel sessionDetails;
+
+    public static String FROM_ORGANISED_SESSION = "from_organised_sessions";
+    public static String FROM_HOME_SCREEN = "from_home_sessions";
+    public static String HOME_SCREEN = "home_sessions";
+    public static String USER_ID = "user_id";
 }

@@ -11,12 +11,14 @@ import static com.example.tutornite.utils.FireStoreConstants.USER_EMAIL;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -174,6 +176,22 @@ public class BaseActivity extends AppCompatActivity {
                 });
     }
 
+    public void deleteSession(FirebaseFirestore db, String sessionID, SessionCancelInterface sessionCancelInterface) {
+        showProgressDialog();
+
+        db.collection(SESSIONS)
+                .document(sessionID)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    hideProgressDialog();
+                    Toast.makeText(this, "Session deleted successfully", Toast.LENGTH_SHORT).show();
+                    sessionCancelInterface.cancelledSuccessfully();
+                }).addOnFailureListener(e -> {
+                    hideProgressDialog();
+                    Toast.makeText(this, "Please try again.", Toast.LENGTH_SHORT).show();
+                });
+    }
+
     private void removeSessionFromPersonalProfile(FirebaseFirestore db, String userID, String sessionID, SessionCancelInterface sessionCancelInterface) {
         db.collection(USERS)
                 .document(Objects.requireNonNull(userID))
@@ -263,4 +281,14 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void openWebPage(String url) {
+        try {
+            Uri webpage = Uri.parse(url);
+            Intent myIntent = new Intent(Intent.ACTION_VIEW, webpage);
+            startActivity(myIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No application can handle this request. Please install a web browser or check your URL.", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
 }
