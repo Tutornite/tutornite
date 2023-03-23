@@ -1,9 +1,10 @@
 package com.example.tutornite.activities;
 
+import static com.example.tutornite.utils.Constants.attendedSessions;
 import static com.example.tutornite.utils.Constants.remoteUpcomingSessions;
+import static com.example.tutornite.utils.FireStoreConstants.ATTENDED;
 import static com.example.tutornite.utils.FireStoreConstants.PARTICIPANTS;
 import static com.example.tutornite.utils.FireStoreConstants.SESSIONS;
-import static com.example.tutornite.utils.FireStoreConstants.SESSION_TITLE;
 import static com.example.tutornite.utils.FireStoreConstants.UPCOMING_SESSIONS;
 import static com.example.tutornite.utils.FireStoreConstants.USERS;
 import static com.example.tutornite.utils.FireStoreConstants.USER_EMAIL;
@@ -38,6 +39,8 @@ import androidx.core.content.ContextCompat;
 import com.example.tutornite.R;
 import com.example.tutornite.interfaces.SessionCancelInterface;
 import com.example.tutornite.interfaces.SessionJoinInterface;
+import com.example.tutornite.models.UpcomingSessionModel;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
@@ -122,7 +125,7 @@ public class BaseActivity extends AppCompatActivity {
         return !TextUtils.isEmpty(password) && matcher.matches();
     }
 
-    public void joinSessionBase(FirebaseFirestore db, String sessionID, String userID, String userEmail, String sessionTitle, SessionJoinInterface sessionActionsInterface) {
+    public void joinSessionBase(FirebaseFirestore db, String sessionID, String userID, String userEmail, String sessionTitle, Timestamp sessionDateTime, SessionJoinInterface sessionActionsInterface) {
         showProgressDialog();
         Map<String, Object> user = new HashMap<>();
         user.put(USER_EMAIL, userEmail);
@@ -133,30 +136,56 @@ public class BaseActivity extends AppCompatActivity {
                 .document(userID)
                 .set(user)
                 .addOnSuccessListener(aVoid -> {
-                    addSessionToPersonalProfile(db, userID, sessionID, sessionTitle, sessionActionsInterface);
+                    addSessionToPersonalProfile(db, userID, sessionID, sessionTitle, sessionActionsInterface, sessionDateTime);
                 }).addOnFailureListener(e -> {
                     hideProgressDialog();
-                    Toast.makeText(this, "Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.try_again), Toast.LENGTH_SHORT).show();
                 });
     }
 
-    private void addSessionToPersonalProfile(FirebaseFirestore db, String userID, String sessionID, String sessionTitle, SessionJoinInterface sessionActionsInterface) {
-        Map<String, Object> session = new HashMap<>();
-        session.put(SESSION_TITLE, sessionTitle);
+    private void addSessionToPersonalProfile(FirebaseFirestore db, String userID,
+                                             String sessionID, String sessionTitle,
+                                             SessionJoinInterface sessionActionsInterface,
+                                             Timestamp sessionDateTime) {
+        UpcomingSessionModel upcomingSessionModel = new UpcomingSessionModel();
+        upcomingSessionModel.setSessionTitle(sessionTitle);
+        upcomingSessionModel.setAttended(false);
+        upcomingSessionModel.setSessionDateTime(sessionDateTime);
 
         db.collection(USERS)
                 .document(Objects.requireNonNull(userID))
                 .collection(UPCOMING_SESSIONS)
                 .document(sessionID)
-                .set(session)
+                .set(upcomingSessionModel)
                 .addOnSuccessListener(aVoid -> {
                     hideProgressDialog();
-                    Toast.makeText(this, "Joined successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.joined_success), Toast.LENGTH_SHORT).show();
                     remoteUpcomingSessions.add(sessionID);
                     sessionActionsInterface.joinSuccessfully();
                 }).addOnFailureListener(e -> {
                     hideProgressDialog();
-                    Toast.makeText(this, "Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.try_again), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    public void markSessionAttended(FirebaseFirestore db, String sessionID, String userID, SessionJoinInterface sessionActionsInterface) {
+        showProgressDialog();
+        Map<String, Object> map = new HashMap<>();
+        map.put(ATTENDED, true);
+
+        db.collection(USERS)
+                .document(Objects.requireNonNull(userID))
+                .collection(UPCOMING_SESSIONS)
+                .document(sessionID)
+                .update(map)
+                .addOnSuccessListener(aVoid -> {
+                    hideProgressDialog();
+                    Toast.makeText(this, getString(R.string.thankyou_confirmation), Toast.LENGTH_SHORT).show();
+                    attendedSessions.add(sessionID);
+                    sessionActionsInterface.joinSuccessfully();
+                }).addOnFailureListener(e -> {
+                    hideProgressDialog();
+                    Toast.makeText(this, getString(R.string.try_again), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -172,7 +201,7 @@ public class BaseActivity extends AppCompatActivity {
                     removeSessionFromPersonalProfile(db, userID, sessionID, sessionCancelInterface);
                 }).addOnFailureListener(e -> {
                     hideProgressDialog();
-                    Toast.makeText(this, "Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.try_again), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -184,11 +213,11 @@ public class BaseActivity extends AppCompatActivity {
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     hideProgressDialog();
-                    Toast.makeText(this, "Session deleted successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.session_delete), Toast.LENGTH_SHORT).show();
                     sessionCancelInterface.cancelledSuccessfully();
                 }).addOnFailureListener(e -> {
                     hideProgressDialog();
-                    Toast.makeText(this, "Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.try_again), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -201,11 +230,11 @@ public class BaseActivity extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> {
                     hideProgressDialog();
                     remoteUpcomingSessions.remove(sessionID);
-                    Toast.makeText(this, "Cancelled successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.cancelled_success), Toast.LENGTH_SHORT).show();
                     sessionCancelInterface.cancelledSuccessfully();
                 }).addOnFailureListener(e -> {
                     hideProgressDialog();
-                    Toast.makeText(this, "Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.try_again), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -287,7 +316,7 @@ public class BaseActivity extends AppCompatActivity {
             Intent myIntent = new Intent(Intent.ACTION_VIEW, webpage);
             startActivity(myIntent);
         } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "No application can handle this request. Please install a web browser or check your URL.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.no_apps_can_manage), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }

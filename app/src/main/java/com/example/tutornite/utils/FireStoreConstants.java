@@ -13,6 +13,7 @@ public class FireStoreConstants {
     /*Fields*/
     public static String USER_EMAIL = "useremail";
     public static String SESSION_TITLE = "sessionTitle";
+    public static String ATTENDED = "attended";
     public static String NAME = "name";
     public static String USER_TYPE_LEARNER = "learner";
     public static String USER_TYPE_TUTOR = "tutor";

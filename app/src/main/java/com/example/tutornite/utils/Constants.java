@@ -16,6 +16,7 @@ public class Constants {
     public static ArrayList<String> remoteColleges = new ArrayList<>();
     public static UserModel currentUserModel = new UserModel();
     public static String app_date_format = "dd MMMM yyyy";
+    public static ArrayList<String> attendedSessions = new ArrayList<>();
 
     /*Session*/
     public static SessionDetailsModel sessionDetails;

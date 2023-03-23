@@ -16,6 +16,7 @@ import com.example.tutornite.R;
 import com.example.tutornite.adapters.SessionsAdapter;
 import com.example.tutornite.interfaces.SessionEventsInterface;
 import com.example.tutornite.models.SessionDetailsModel;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -99,10 +100,16 @@ public class MySessionActivity extends BaseActivity implements SessionEventsInte
     }
 
     @Override
-    public void joinSession(String sessionID, String sessionTitle, int position) {
+    public void joinSession(String sessionID, String sessionTitle, int position, Timestamp sessionDateTime) {
         joinSessionBase(db, sessionID, currentUser.getUid(),
-                currentUser.getEmail(), sessionTitle, () ->
+                currentUser.getEmail(), sessionTitle, sessionDateTime, () ->
                         recyclerSessions.getAdapter().notifyItemChanged(position));
+    }
+
+    @Override
+    public void attendedSession(String sessionID, int position) {
+        markSessionAttended(db, sessionID, currentUser.getUid(), () ->
+                recyclerSessions.getAdapter().notifyItemChanged(position));
     }
 
     @Override

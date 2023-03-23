@@ -18,6 +18,7 @@ import com.example.tutornite.adapters.SessionsAdapter;
 import com.example.tutornite.interfaces.SessionEventsInterface;
 import com.example.tutornite.models.SessionDetailsModel;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -93,8 +94,14 @@ public class OrganisedSessionActivity extends BaseActivity implements SessionEve
     }
 
     @Override
-    public void joinSession(String documentID, String sessionTitle, int position) {
+    public void joinSession(String documentID, String sessionTitle, int position, Timestamp sessionDateTime) {
 
+    }
+
+    @Override
+    public void attendedSession(String sessionID, int position) {
+        markSessionAttended(db, sessionID, mAuth.getUid(), () ->
+                recyclerSessions.getAdapter().notifyItemChanged(position));
     }
 
     @Override
