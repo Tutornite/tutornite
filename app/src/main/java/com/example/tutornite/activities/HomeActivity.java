@@ -2,8 +2,10 @@ package com.example.tutornite.activities;
 
 import static com.example.tutornite.utils.Constants.FROM_HOME_SCREEN;
 import static com.example.tutornite.utils.Constants.HOME_SCREEN;
+import static com.example.tutornite.utils.Constants.attendedSessions;
 import static com.example.tutornite.utils.Constants.remoteSessionsCategoryList;
 import static com.example.tutornite.utils.Constants.remoteUpcomingSessions;
+import static com.example.tutornite.utils.FireStoreConstants.ATTENDED;
 import static com.example.tutornite.utils.FireStoreConstants.SESSIONS;
 import static com.example.tutornite.utils.FireStoreConstants.SESSIONS_CATEGORIES;
 import static com.example.tutornite.utils.FireStoreConstants.UPCOMING_SESSIONS;
@@ -11,9 +13,7 @@ import static com.example.tutornite.utils.FireStoreConstants.USERS;
 import static com.example.tutornite.utils.FireStoreConstants.USER_TYPE_LEARNER;
 
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -27,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -45,6 +44,7 @@ import com.example.tutornite.models.SessionDetailsModel;
 import com.example.tutornite.utils.Constants;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -62,7 +62,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     ImageView drawer_btn;
     DrawerLayout drawer_layout;
-    LinearLayout share_nav, rating_nav, logout_nav, profile_nav, my_sessions_nav, organised_sessions_nav;
+    LinearLayout share_nav, rating_nav, logout_nav, profile_nav, my_sessions_nav, organised_sessions_nav, my_progress_nav;
     RelativeLayout rel_filter;
     CircleImageView user_image;
     FloatingActionButton create_session_fab;
@@ -124,8 +124,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                     if (task.isSuccessful() && task.getResult() != null) {
                         List<String> upcomingSes = new ArrayList<>();
 
+                        attendedSessions.clear();
+
                         for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
                             upcomingSes.add(documentSnapshot.getId());
+
+                            if (documentSnapshot.contains(ATTENDED) &&
+                                    documentSnapshot.getBoolean(ATTENDED)) {
+                                attendedSessions.add(documentSnapshot.getId());
+                            }
                         }
 
                         remoteUpcomingSessions.clear();
@@ -201,6 +208,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         share_nav.setOnClickListener(this);
         rating_nav.setOnClickListener(this);
         logout_nav.setOnClickListener(this);
+        my_progress_nav.setOnClickListener(this);
         profile_nav.setOnClickListener(this);
         my_sessions_nav.setOnClickListener(this);
         organised_sessions_nav.setOnClickListener(this);
@@ -274,6 +282,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         share_nav = findViewById(R.id.share_nav);
         rating_nav = findViewById(R.id.rating_nav);
         logout_nav = findViewById(R.id.logout_nav);
+        my_progress_nav = findViewById(R.id.my_progress_nav);
         profile_nav = findViewById(R.id.profile_nav);
         my_sessions_nav = findViewById(R.id.my_sessions_nav);
         organised_sessions_nav = findViewById(R.id.organised_sessions_nav);
@@ -342,6 +351,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.organised_sessions_nav:
                 drawer_layout.closeDrawer(Gravity.LEFT);
                 startActivity(new Intent(this, OrganisedSessionActivity.class));
+                break;
+            case R.id.my_progress_nav:
+                drawer_layout.closeDrawer(Gravity.LEFT);
+                startActivity(new Intent(this, ProgressActivity.class));
                 break;
             case R.id.rel_filter:
                 selectFilterDialog();
@@ -417,10 +430,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    public void joinSession(String sessionID, String sessionTitle, int position) {
+    public void joinSession(String sessionID, String sessionTitle, int position, Timestamp sessionDateTime) {
         joinSessionBase(db, sessionID, currentUser.getUid(),
-                currentUser.getEmail(), sessionTitle, () ->
+                currentUser.getEmail(), sessionTitle, sessionDateTime, () ->
                         recyclerSessions.getAdapter().notifyItemChanged(position));
+    }
+
+    @Override
+    public void attendedSession(String sessionID, int position) {
+        markSessionAttended(db, sessionID, currentUser.getUid(), () ->
+                recyclerSessions.getAdapter().notifyItemChanged(position));
     }
 
     @Override

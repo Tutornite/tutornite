@@ -3,6 +3,7 @@ package com.example.tutornite.adapters;
 import static com.example.tutornite.utils.Constants.FROM_HOME_SCREEN;
 import static com.example.tutornite.utils.Constants.FROM_ORGANISED_SESSION;
 import static com.example.tutornite.utils.Constants.app_date_format;
+import static com.example.tutornite.utils.Constants.attendedSessions;
 import static com.example.tutornite.utils.Constants.remoteUpcomingSessions;
 import static com.example.tutornite.utils.DateTimeFormatter.convertTimestampToFormat;
 
@@ -25,8 +26,10 @@ import com.example.tutornite.activities.SessionDetailsActivity;
 import com.example.tutornite.interfaces.SessionEventsInterface;
 import com.example.tutornite.models.SessionDetailsModel;
 import com.example.tutornite.utils.Constants;
+import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -74,7 +77,7 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
 
         holder.lin_join_lay.setOnClickListener(view -> {
             sessionEventsInterface.joinSession(sessionDetailsModel.getDocumentID(),
-                    sessionDetailsModel.getSessionTitle(), position);
+                    sessionDetailsModel.getSessionTitle(), position, sessionDetailsModel.getSessionDateTime());
         });
 
         holder.lin_cancel_lay.setOnClickListener(view -> {
@@ -85,16 +88,30 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
             sessionEventsInterface.deleteSession(sessionDetailsModel.getDocumentID(), position);
         });
 
-        holder.lin_author_lay.setVisibility(View.INVISIBLE);
-        holder.lin_cancel_lay.setVisibility(View.INVISIBLE);
-        holder.lin_delete_lay.setVisibility(View.INVISIBLE);
-        holder.lin_join_lay.setVisibility(View.INVISIBLE);
+        holder.lin_attended_lay.setOnClickListener(view -> {
+            sessionEventsInterface.attendedSession(sessionDetailsModel.getDocumentID(), position);
+        });
+
+        holder.lin_author_lay.setVisibility(View.GONE);
+        holder.lin_cancel_lay.setVisibility(View.GONE);
+        holder.lin_delete_lay.setVisibility(View.GONE);
+        holder.lin_join_lay.setVisibility(View.GONE);
+        holder.lin_attended_lay.setVisibility(View.GONE);
+        holder.lin_attendance_confirmed_lay.setVisibility(View.GONE);
 
         if (fromWhichScreen.equalsIgnoreCase(FROM_ORGANISED_SESSION)) {
             holder.lin_delete_lay.setVisibility(View.VISIBLE);
         } else if (fromWhichScreen.equalsIgnoreCase(FROM_HOME_SCREEN)) {
             if (remoteUpcomingSessions.contains(sessionDetailsModel.getDocumentID())) {
-                holder.lin_cancel_lay.setVisibility(View.VISIBLE);
+                if (isSessionPassed(sessionDetailsModel.getSessionDateTime())) {
+                    if (attendedSessions.contains(sessionDetailsModel.getDocumentID())) {
+                        holder.lin_attendance_confirmed_lay.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.lin_attended_lay.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    holder.lin_cancel_lay.setVisibility(View.VISIBLE);
+                }
             } else if (sessionDetailsModel.getPostedByUID().equals(currentUserID)) {
                 holder.lin_author_lay.setVisibility(View.VISIBLE);
             } else {
@@ -107,6 +124,12 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
             Intent intent = new Intent(context, SessionDetailsActivity.class);
             context.startActivity(intent);
         });
+    }
+
+    private boolean isSessionPassed(Timestamp sessionDateTime) {
+        Date currentDate = new Date();
+        Date timestampDate = sessionDateTime.toDate();
+        return timestampDate.before(currentDate);
     }
 
     @Override
@@ -128,7 +151,7 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
 
         CircleImageView img_user_image;
         TextView txt_event_title, txt_event_short_desc, txt_event_address, txt_event_date, txt_event_time;
-        LinearLayout lin_join_lay, lin_cancel_lay, lin_author_lay, lin_delete_lay;
+        LinearLayout lin_join_lay, lin_attendance_confirmed_lay, lin_cancel_lay, lin_author_lay, lin_delete_lay, lin_attended_lay;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -143,6 +166,8 @@ public class SessionsAdapter extends RecyclerView.Adapter<SessionsAdapter.ViewHo
             lin_cancel_lay = itemView.findViewById(R.id.lin_cancel_lay);
             lin_author_lay = itemView.findViewById(R.id.lin_author_lay);
             lin_delete_lay = itemView.findViewById(R.id.lin_delete_lay);
+            lin_attended_lay = itemView.findViewById(R.id.lin_attended_lay);
+            lin_attendance_confirmed_lay = itemView.findViewById(R.id.lin_attendance_confirmed_lay);
         }
     }
 }

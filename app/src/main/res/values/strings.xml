@@ -69,4 +69,19 @@
     <string name="session_topic">Session Topic</string>
     <string name="session_organised_by">Session Organised By</string>
     <string name="session_date_amp_time"><![CDATA[Session Date & Time]]></string>
+    <string name="progress">Progress</string>
+    <string name="upcoming_sessions">Upcoming Sessions</string>
+    <string name="sessions_attended">Sessions Attended</string>
+    <string name="total_sessions">Total Sessions</string>
+    <string name="zero">0</string>
+    <string name="my_progress">My Progress</string>
+    <string name="attended_click_here">Attended?\nClick here to confirm!</string>
+    <string name="sessions_unattended">Non-attended Sessions</string>
+    <string name="attendance_confirmed">Attendance confirmed</string>
+    <string name="thankyou_confirmation">Thank you for your confirmation</string>
+    <string name="try_again">Please try again.</string>
+    <string name="no_apps_can_manage">No application can handle this request. Please install a web browser or check your URL.</string>
+    <string name="cancelled_success">Cancelled successfully</string>
+    <string name="session_delete">Session deleted successfully</string>
+    <string name="joined_success">Joined successfully</string>
 </resources>

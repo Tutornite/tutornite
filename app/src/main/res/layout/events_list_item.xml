@@ -137,133 +137,192 @@
             android:layout_marginTop="@dimen/_7sdp"
             android:layout_marginBottom="@dimen/_4sdp"
             android:background="@color/app_background"
-            app:layout_constraintBottom_toTopOf="@+id/lin_join_lay"
+            app:layout_constraintBottom_toTopOf="@+id/btns"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lay_date_time" />
 
         <LinearLayout
-            android:id="@+id/lin_join_lay"
-            android:layout_width="wrap_content"
+            android:id="@+id/btns"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/_20sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:visibility="visible"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lay_divider">
 
-            <ImageView
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:padding="@dimen/_2sdp"
-                android:src="@drawable/ic_add" />
-
-            <TextView
+            <LinearLayout
+                android:id="@+id/lin_join_lay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="@font/myriad_pro_semibold"
-                android:maxLines="1"
-                android:text="@string/join"
-                android:textColor="@color/green"
-                android:textSize="@dimen/_15sdp" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lay_divider">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:src="@drawable/ic_add" />
 
-        <LinearLayout
-            android:id="@+id/lin_cancel_lay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/_20sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lay_divider">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/myriad_pro_semibold"
+                    android:maxLines="1"
+                    android:text="@string/join"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/_15sdp" />
 
-            <ImageView
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:padding="@dimen/_2sdp"
-                android:rotation="45"
-                android:src="@drawable/ic_add"
-                app:tint="@color/red" />
+            </LinearLayout>
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/lin_cancel_lay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="@font/myriad_pro_semibold"
-                android:maxLines="1"
-                android:text="@string/cancel"
-                android:textColor="@color/red"
-                android:textSize="@dimen/_15sdp" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lay_divider">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:rotation="45"
+                    android:src="@drawable/ic_add"
+                    app:tint="@color/red" />
 
-        <LinearLayout
-            android:id="@+id/lin_author_lay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/_20sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lay_divider">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/myriad_pro_semibold"
+                    android:maxLines="1"
+                    android:text="@string/cancel"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_15sdp" />
 
-            <TextView
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin_attended_lay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/myriad_pro_semibold"
-                android:maxLines="1"
-                android:text="@string/posted_by_you"
-                android:textColor="@color/orange"
-                android:textSize="@dimen/_15sdp" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lay_divider">
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/myriad_pro_semibold"
+                    android:text="@string/attended_click_here"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple"
+                    android:textSize="@dimen/_15sdp" />
 
-        <LinearLayout
-            android:id="@+id/lin_delete_lay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/_20sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lay_divider">
+            </LinearLayout>
 
-            <ImageView
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:padding="@dimen/_2sdp"
-                android:rotation="45"
-                android:src="@drawable/ic_add"
-                app:tint="@color/red" />
-
-            <TextView
+            <LinearLayout
+                android:id="@+id/lin_attendance_confirmed_lay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="@font/myriad_pro_semibold"
-                android:maxLines="1"
-                android:text="@string/delete_session"
-                android:textColor="@color/red"
-                android:textSize="@dimen/_15sdp" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lay_divider">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/myriad_pro_semibold"
+                    android:text="@string/attendance_confirmed"
+                    android:textAlignment="center"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/_15sdp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin_author_lay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lay_divider">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/myriad_pro_semibold"
+                    android:maxLines="1"
+                    android:text="@string/posted_by_you"
+                    android:textColor="@color/orange"
+                    android:textSize="@dimen/_15sdp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin_delete_lay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_5sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lay_divider">
+
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:rotation="45"
+                    android:src="@drawable/ic_add"
+                    app:tint="@color/red" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/myriad_pro_semibold"
+                    android:maxLines="1"
+                    android:text="@string/delete_session"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_15sdp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

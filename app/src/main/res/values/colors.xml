@@ -10,6 +10,8 @@
     <color name="font_color">#585858</color>
     <color name="green">#24d3ad</color>
     <color name="orange">#F18E3C</color>
+    <color name="purple">#AD1457</color>
+    <color name="blue">#00838F</color>
     <color name="red">#C62828</color>
-        <color name="font_gray">#93989E</color>
+    <color name="font_gray">#93989E</color>
 </resources>
