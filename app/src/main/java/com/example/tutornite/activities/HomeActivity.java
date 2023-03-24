@@ -62,7 +62,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     ImageView drawer_btn;
     DrawerLayout drawer_layout;
-    LinearLayout share_nav, rating_nav, logout_nav, profile_nav, my_sessions_nav, organised_sessions_nav, my_progress_nav;
+    LinearLayout share_nav, rating_nav, appreciation_certificate_nav, logout_nav, profile_nav, my_sessions_nav, organised_sessions_nav, my_progress_nav;
     RelativeLayout rel_filter;
     CircleImageView user_image;
     FloatingActionButton create_session_fab;
@@ -200,6 +200,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         if (Constants.currentUserModel.getType().equalsIgnoreCase(USER_TYPE_LEARNER)) {
             create_session_fab.setVisibility(View.GONE);
             organised_sessions_nav.setVisibility(View.GONE);
+            appreciation_certificate_nav.setVisibility(View.GONE);
         }
     }
 
@@ -214,6 +215,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         organised_sessions_nav.setOnClickListener(this);
         rel_filter.setOnClickListener(this);
         create_session_fab.setOnClickListener(this);
+        appreciation_certificate_nav.setOnClickListener(this);
 
         drawer_layout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -294,6 +296,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         user_name = findViewById(R.id.user_name);
         user_email = findViewById(R.id.user_email);
         recyclerSessions = findViewById(R.id.recycler_events);
+        appreciation_certificate_nav = findViewById(R.id.appreciation_certificate_nav);
         recyclerSessions.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -355,6 +358,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.my_progress_nav:
                 drawer_layout.closeDrawer(Gravity.LEFT);
                 startActivity(new Intent(this, ProgressActivity.class));
+                break;
+            case R.id.appreciation_certificate_nav:
+                drawer_layout.closeDrawer(Gravity.LEFT);
+                startActivity(new Intent(this, CertificateActivity.class));
                 break;
             case R.id.rel_filter:
                 selectFilterDialog();

@@ -11,7 +11,7 @@
     <include layout="@layout/home_screen_main" />
 
     <com.google.android.material.navigation.NavigationView
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/_230sdp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true">
