@@ -84,4 +84,12 @@
     <string name="cancelled_success">Cancelled successfully</string>
     <string name="session_delete">Session deleted successfully</string>
     <string name="joined_success">Joined successfully</string>
+    <string name="appreciation_certificate">Appreciation Certificate</string>
+    <string name="certificate_of_recognition">CERTIFICATE OF RECOGNITION</string>
+    <string name="outstanding_teacher">Outstanding Teacher</string>
+    <string name="this_certificate_is_awarded_to">This certificate is awarded to</string>
+    <string name="for_exceptional_skills">for exceptional skill and performance in the field of teaching</string>
+    <string name="date">Date</string>
+    <string name="signature">Signature</string>
+    <string name="share_certificate">Share Certificate</string>
 </resources>
