@@ -33,6 +33,7 @@
 
     <string name="search_learning_sessions">Search learning sessions</string>
     <string name="sorry_sessions_are_not_available">Sorry sessions are not available</string>
+    <string name="sorry_tutors_are_not_available">Sorry tutors are not available</string>
     <string name="join">Join</string>
     <string name="apply">Apply</string>
     <string name="session_categories">Session Categories</string>
@@ -79,6 +80,8 @@
     <string name="sessions_unattended">Non-attended Sessions</string>
     <string name="attendance_confirmed">Attendance confirmed</string>
     <string name="thankyou_confirmation">Thank you for your confirmation</string>
+    <string name="notif_enabled_confirmation">Notification Enabled</string>
+    <string name="notif_disabled_confirmation">Notification Disabled</string>
     <string name="try_again">Please try again.</string>
     <string name="no_apps_can_manage">No application can handle this request. Please install a web browser or check your URL.</string>
     <string name="cancelled_success">Cancelled successfully</string>
@@ -92,4 +95,11 @@
     <string name="date">Date</string>
     <string name="signature">Signature</string>
     <string name="share_certificate">Share Certificate</string>
+    <string name="nav_settings_text">Settings</string>
+    <string name="enable_notifications">Enable Notifications</string>
+    <string name="about_tutornite">About Tutornite</string>
+    <string name="help_and_support">Help and Support</string>
+    <string name="version_txt">Version 1.0.0</string>
+    <string name="contact_tutors">Contact Tutors</string>
+    <string name="contact_tutor_btn_txt">Contact</string>
 </resources>

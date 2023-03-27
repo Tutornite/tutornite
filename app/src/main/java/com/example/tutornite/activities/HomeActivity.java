@@ -62,7 +62,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     ImageView drawer_btn;
     DrawerLayout drawer_layout;
-    LinearLayout share_nav, rating_nav, appreciation_certificate_nav, logout_nav, profile_nav, my_sessions_nav, organised_sessions_nav, my_progress_nav;
+    LinearLayout share_nav, rating_nav, appreciation_certificate_nav, logout_nav, profile_nav, my_sessions_nav, organised_sessions_nav, my_progress_nav, settings_nav, tutor_list_nav;
     RelativeLayout rel_filter;
     CircleImageView user_image;
     FloatingActionButton create_session_fab;
@@ -216,6 +216,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         rel_filter.setOnClickListener(this);
         create_session_fab.setOnClickListener(this);
         appreciation_certificate_nav.setOnClickListener(this);
+        settings_nav.setOnClickListener(this);
+        tutor_list_nav.setOnClickListener(this);
 
         drawer_layout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -282,6 +284,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         drawer_btn = findViewById(R.id.drawer_btn);
         drawer_layout = findViewById(R.id.drawer_layout);
         share_nav = findViewById(R.id.share_nav);
+        settings_nav = findViewById(R.id.settings_nav);
+        tutor_list_nav = findViewById(R.id.tutor_list_nav);
         rating_nav = findViewById(R.id.rating_nav);
         logout_nav = findViewById(R.id.logout_nav);
         my_progress_nav = findViewById(R.id.my_progress_nav);
@@ -317,6 +321,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.rating_nav:
                 drawer_layout.closeDrawer(Gravity.LEFT);
                 openWebPage(Constants.rating_app_url);
+                break;
+            case R.id.settings_nav:
+                drawer_layout.closeDrawer(Gravity.LEFT);
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.logout_nav:
                 drawer_layout.closeDrawer(Gravity.LEFT);
@@ -369,6 +377,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.create_session_fab:
                 drawer_layout.closeDrawer(Gravity.LEFT);
                 startActivity(new Intent(this, SessionCreateActivity.class));
+                break;
+            case R.id.tutor_list_nav:
+                drawer_layout.closeDrawer(Gravity.LEFT);
+                startActivity(new Intent(this, TutorListActivity.class));
                 break;
         }
     }

@@ -16,6 +16,9 @@ public class FireStoreConstants {
     public static String ATTENDED = "attended";
     public static String NAME = "name";
     public static String USER_TYPE_LEARNER = "learner";
+    public static String USER_TYPE = "type";
     public static String USER_TYPE_TUTOR = "tutor";
     public static String POSTED_BY_UID = "postedByUID";
+    public static String IS_NOTIFICATION_ENABLED = "isNotificationEnabled";
+
 }
