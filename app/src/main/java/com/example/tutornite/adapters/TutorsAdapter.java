@@ -66,7 +66,7 @@ public class TutorsAdapter extends RecyclerView.Adapter<TutorsAdapter.ViewHolder
 
 
         holder.lin_contact_lay.setOnClickListener(view -> {
-//            openWebPage("mailto:" + userModel.getEmail());
+            openEmailApp(userModel.getEmail());
         });
 
     }
@@ -86,16 +86,17 @@ public class TutorsAdapter extends RecyclerView.Adapter<TutorsAdapter.ViewHolder
         notifyItemRemoved(position);
     }
 
-//    public void openWebPage(String url) {
-//        try {
-//            Uri webpage = Uri.parse(url);
-//            Intent myIntent = new Intent(Intent.ACTION_VIEW, webpage);
-//            startActivity();
-//        } catch (ActivityNotFoundException e) {
-//            Toast.makeText(this, getString(R.string.no_apps_can_manage), Toast.LENGTH_LONG).show();
-//            e.printStackTrace();
-//        }
-//    }
+
+    public void openEmailApp(String emailId) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { emailId });
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Email subject");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Email body");
+
+        Intent chooserIntent = Intent.createChooser(emailIntent, "Select Email App");
+        context.startActivity(chooserIntent);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

@@ -1,5 +1,6 @@
 package com.example.tutornite.activities;
 
+import static com.example.tutornite.utils.Constants.FROM_HOME_SCREEN;
 import static com.example.tutornite.utils.Constants.FROM_ORGANISED_SESSION;
 import static com.example.tutornite.utils.FireStoreConstants.USERS;
 import static com.example.tutornite.utils.FireStoreConstants.USER_TYPE;
@@ -93,7 +94,7 @@ public class TutorListActivity extends BaseActivity {
             recyclerUsers.setVisibility(View.VISIBLE);
         }
 
-        tutorsAdapter = new TutorsAdapter(this, userDetailsModel, mAuth.getUid(), FROM_ORGANISED_SESSION);
+        tutorsAdapter = new TutorsAdapter(this, userDetailsModel, mAuth.getUid(), FROM_HOME_SCREEN);
         recyclerUsers.setAdapter(tutorsAdapter);
     }
 

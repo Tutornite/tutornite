@@ -19,4 +19,6 @@ public class FireStoreConstants {
     public static String USER_TYPE = "type";
     public static String USER_TYPE_TUTOR = "tutor";
     public static String POSTED_BY_UID = "postedByUID";
+    public static String IS_NOTIFICATION_ENABLED = "isNotificationEnabled";
+
 }

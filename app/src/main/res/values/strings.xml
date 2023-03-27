@@ -80,6 +80,8 @@
     <string name="sessions_unattended">Non-attended Sessions</string>
     <string name="attendance_confirmed">Attendance confirmed</string>
     <string name="thankyou_confirmation">Thank you for your confirmation</string>
+    <string name="notif_enabled_confirmation">Notification Enabled</string>
+    <string name="notif_disabled_confirmation">Notification Disabled</string>
     <string name="try_again">Please try again.</string>
     <string name="no_apps_can_manage">No application can handle this request. Please install a web browser or check your URL.</string>
     <string name="cancelled_success">Cancelled successfully</string>

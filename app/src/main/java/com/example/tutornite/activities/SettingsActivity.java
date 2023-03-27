@@ -1,16 +1,28 @@
 package com.example.tutornite.activities;
 
+import static com.example.tutornite.utils.Constants.attendedSessions;
+import static com.example.tutornite.utils.Constants.currentUserModel;
+import static com.example.tutornite.utils.FireStoreConstants.ATTENDED;
+import static com.example.tutornite.utils.FireStoreConstants.IS_NOTIFICATION_ENABLED;
+import static com.example.tutornite.utils.FireStoreConstants.UPCOMING_SESSIONS;
+import static com.example.tutornite.utils.FireStoreConstants.USERS;
+
 import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.tutornite.R;
 import com.example.tutornite.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -32,6 +44,11 @@ public class SettingsActivity extends BaseActivity {
         currentUser = mAuth.getCurrentUser();
 
         initViews();
+        setNotificationCheckbox();
+    }
+
+    private void setNotificationCheckbox() {
+        notification_chkbox.setChecked(currentUserModel.getNotificationEnabled());
     }
 
     private void initViews() {
@@ -44,9 +61,26 @@ public class SettingsActivity extends BaseActivity {
 
         notification_chkbox.setOnCheckedChangeListener((compoundButton, isChecked) ->
         {
-            if(isChecked) {
+            showProgressDialog();
 
-            }
+            Map<String, Object> map = new HashMap<>();
+            map.put(IS_NOTIFICATION_ENABLED, isChecked);
+            db.collection(USERS)
+                    .document(Objects.requireNonNull(currentUser.getUid()))
+                    .update(map)
+                    .addOnSuccessListener(aVoid -> {
+                        hideProgressDialog();
+                        currentUserModel.setNotificationEnabled(isChecked);
+                        if(isChecked){
+                            Toast.makeText(this, getString(R.string.notif_enabled_confirmation), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, getString(R.string.notif_disabled_confirmation), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }).addOnFailureListener(e -> {
+                        hideProgressDialog();
+                        Toast.makeText(this, getString(R.string.try_again), Toast.LENGTH_SHORT).show();
+                    });
         });
 
         back_img.setOnClickListener(view -> {
@@ -62,5 +96,7 @@ public class SettingsActivity extends BaseActivity {
         });
 
     }
+
+
 
 }

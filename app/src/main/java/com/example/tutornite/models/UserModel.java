@@ -7,6 +7,7 @@ public class UserModel {
 
     Timestamp birthOfDate;
     String documentID, email, firstName, lastName, userImage, type, college, paymentLink, skills;
+    Boolean isNotificationEnabled = false;
 
     public UserModel() {
     }
@@ -90,5 +91,13 @@ public class UserModel {
 
     public void setDocumentID(String documentID) {
         this.documentID = documentID;
+    }
+
+    public Boolean getNotificationEnabled() {
+        return isNotificationEnabled;
+    }
+
+    public void setNotificationEnabled(Boolean notificationEnabled) {
+        isNotificationEnabled = notificationEnabled;
     }
 }
