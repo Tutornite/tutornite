@@ -1,11 +1,12 @@
 package com.example.tutornite.models;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
 
 public class UserModel {
 
     Timestamp birthOfDate;
-    String email, firstName, lastName, userImage, type, college, paymentLink, skills;
+    String documentID, email, firstName, lastName, userImage, type, college, paymentLink, skills;
 
     public UserModel() {
     }
@@ -80,5 +81,14 @@ public class UserModel {
 
     public void setSkills(String skills) {
         this.skills = skills;
+    }
+
+    @Exclude
+    public String getDocumentID() {
+        return documentID;
+    }
+
+    public void setDocumentID(String documentID) {
+        this.documentID = documentID;
     }
 }
